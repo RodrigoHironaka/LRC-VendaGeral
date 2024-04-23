@@ -1,6 +1,0 @@
-@LRC.Identidade.API_HostAddress = http://localhost:5111
-
-GET {{LRC.Identidade.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

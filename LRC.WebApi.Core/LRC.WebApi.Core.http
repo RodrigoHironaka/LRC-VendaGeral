@@ -1,6 +1,0 @@
-@LRC.WebApi.Core_HostAddress = http://localhost:5056
-
-GET {{LRC.WebApi.Core_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
