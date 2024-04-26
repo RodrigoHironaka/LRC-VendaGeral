@@ -12,6 +12,6 @@ namespace LRC.Business.Entidades
         public string? Nome { get; set; }
         public Situacao? Situacao { get; set; }
 
-        public Subgrupo? Subgrupo { get; set; }
+        //public Subgrupo? Subgrupo { get; set; }
     }
 }

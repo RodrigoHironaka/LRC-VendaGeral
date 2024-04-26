@@ -13,6 +13,6 @@ namespace LRC.Business.Entidades
         public Situacao? Situacao { get; set; }
 
         public Guid GrupoId { get; set; }
-        public Grupo Grupo { get; set; }
+        public Grupo? Grupo { get; set; }
     }
 }
