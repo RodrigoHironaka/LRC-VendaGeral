@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LRC.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,20 @@ namespace LRC.Data.Migrations
                 {
                     table.PrimaryKey("PK_Grupos", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "LogsAlteracao",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Chave = table.Column<string>(type: "varchar(200)", nullable: false),
+                    Historico = table.Column<string>(type: "varchar(8000)", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogsAlteracao", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -32,6 +46,9 @@ namespace LRC.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Grupos");
+
+            migrationBuilder.DropTable(
+                name: "LogsAlteracao");
         }
     }
 }

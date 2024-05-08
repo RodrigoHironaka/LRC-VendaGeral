@@ -4,6 +4,7 @@ using LRC.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRC.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    partial class MeuDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240508200500_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +44,6 @@ namespace LRC.Data.Migrations
                     b.Property<int?>("Situacao")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Grupos", (string)null);
@@ -68,9 +65,6 @@ namespace LRC.Data.Migrations
                     b.Property<string>("Historico")
                         .IsRequired()
                         .HasColumnType("varchar(8000)");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

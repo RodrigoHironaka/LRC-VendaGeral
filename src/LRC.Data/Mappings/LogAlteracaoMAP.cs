@@ -9,17 +9,16 @@ using System.Threading.Tasks;
 
 namespace LRC.Data.Mappings
 {
-    public class GrupoMAP : IEntityTypeConfiguration<Grupo>
+    public class LogAlteracaoMAP : IEntityTypeConfiguration<LogAlteracao>
     {
-        public void Configure(EntityTypeBuilder<Grupo> builder)
+        public void Configure(EntityTypeBuilder<LogAlteracao> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.DataCadastro).IsRequired();
-            builder.Property(x => x.DataAlteracao);
             builder.Property(x => x.UsuarioCadastroId);
-            builder.Property(x => x.UsuarioAlteracaoId);
-            builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(200)");
-            builder.ToTable("Grupos");
+            builder.Property(x => x.Chave).IsRequired().HasColumnType("varchar(200)");
+            builder.Property(x => x.Historico).IsRequired().HasColumnType("varchar(8000)");
+            builder.ToTable("LogsAlteracao");
         }
     }
 }

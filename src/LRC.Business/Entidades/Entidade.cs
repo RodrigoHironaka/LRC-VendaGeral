@@ -16,5 +16,9 @@ namespace LRC.Business.Entidades
 
         public DateTime DataCadastro { get; set; }
         public DateTime DataAlteracao { get; set; }
+
+        public Guid UsuarioCadastroId { get; set; }
+        public Guid UsuarioAlteracaoId { get; set; }
+
     }
 }

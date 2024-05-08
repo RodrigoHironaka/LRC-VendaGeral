@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.modal-header {
+    background-color: #4B0082;
+    color: #ffffff;
+    border-bottom: 1px solid #ccc;
+}

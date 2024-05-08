@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRC.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    [Migration("20240426155249_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240508210241_Initial1")]
+    partial class Initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,9 +44,40 @@ namespace LRC.Data.Migrations
                     b.Property<int?>("Situacao")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UsuarioAlteracaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("Grupos", (string)null);
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.LogAlteracao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Chave")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Historico")
+                        .IsRequired()
+                        .HasColumnType("varchar(8000)");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LogsAlteracao", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<LRC.App.ViewModels.GrupoVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista de Grupos";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"].ToString().ToUpper()</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
 </p>
 <table class="table">
     <thead>
@@ -18,24 +18,48 @@
             <th>
                 @Html.DisplayNameFor(model => model.Situacao)
             </th>
-            <th></th>
+            <th>Opções</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Situacao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Situacao)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+         function chamarExcluir(id) {
+            var url = 'excluir-grupo/' + id;
+            Excluir(id, url)
+         }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO");
+            abrirModal(".editar", "EDITAR REGISTRO");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+
+            
+        });
+    </script>
+}

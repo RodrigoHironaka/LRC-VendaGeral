@@ -17,6 +17,7 @@ namespace LRC.Data.Context
         }
 
         public DbSet<Grupo> Grupos { get; set; }
+        public DbSet<LogAlteracao> LogsAlteracao { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,13 @@ namespace LRC.Data.Context
             //Desativando efeito de exclusão em cascata
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+
+            // Ignorar a propriedade DataAlteracao
+            modelBuilder.Entity<LogAlteracao>(entity =>
+            {
+                entity.Ignore(e => e.DataAlteracao);
+                entity.Ignore(e => e.UsuarioAlteracaoId);
+            });
 
             base.OnModelCreating(modelBuilder);
         }
