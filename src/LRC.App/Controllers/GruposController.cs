@@ -15,22 +15,19 @@ namespace LRC.App.Controllers
     [Authorize]
     public class GruposController : BaseController
     {
-        private readonly IGrupoRepository _grupoRepository;
         private readonly IGrupoService _grupoService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly MeuDbContext _context;
         private readonly ILogAlteracaoService _logAlteracaoService;
 
-        public GruposController(IGrupoRepository grupoRepository,
-                                  IMapper mapper,
+        public GruposController(IMapper mapper,
                                   IGrupoService grupoService,
                                   UserManager<IdentityUser> userManager,
                                   MeuDbContext context,
                                   ILogAlteracaoService logAlteracaoService,
                                   INotificador notificador) : base(notificador)
         {
-            _grupoRepository = grupoRepository;
             _mapper = mapper;
             _grupoService = grupoService;
             _userManager = userManager;
@@ -38,14 +35,13 @@ namespace LRC.App.Controllers
             _logAlteracaoService = logAlteracaoService;
         }
 
-        //[AllowAnonymous]
         [Route("lista-de-grupos")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<GrupoVM>>(await _grupoRepository.ObterTodos()));
+            return View(_mapper.Map<IEnumerable<GrupoVM>>(await _grupoService.ObterTodos()));
         }
 
-        [Route("editar/{id}")]
+        [Route("editar-grupo/{id}")]
         public async Task<IActionResult> Editar(Guid Id)
         {
             var grupoVM = new GrupoVM();
@@ -69,7 +65,7 @@ namespace LRC.App.Controllers
             if (Id != grupoVM.Id) return NotFound();
             if (!ModelState.IsValid) return View(grupoVM);
 
-            IdentityUser user = await _userManager.GetUserAsync(User);
+            IdentityUser? user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
                 if (Id != Guid.Empty)
@@ -116,14 +112,25 @@ namespace LRC.App.Controllers
         public async Task<IActionResult> Deletar(Guid id)
         {
             var grupo = await _grupoService.ObterPorId(id);
-
+            IdentityUser? user = await _userManager.GetUserAsync(User);
             if (grupo == null) return NotFound();
 
-            await _grupoService.Remover(id);
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {grupo.Nome} excluído.", Guid.Parse(user.Id), $"Grupo[{grupo.Id}]");
+                await _grupoService.Remover(id);
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
 
             if (!OperacaoValida()) return View(grupo);
 
-            return Json(grupo.Nome + "excluído com sucesso");
+            return RedirectToAction("Index");
         }
     }
 }

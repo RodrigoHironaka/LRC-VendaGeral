@@ -18,6 +18,7 @@ namespace LRC.Data.Context
 
         public DbSet<Grupo> Grupos { get; set; }
         public DbSet<LogAlteracao> LogsAlteracao { get; set; }
+        public DbSet<Subgrupo> SubGrupos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

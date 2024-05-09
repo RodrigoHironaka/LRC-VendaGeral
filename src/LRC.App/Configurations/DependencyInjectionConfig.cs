@@ -14,10 +14,12 @@ namespace LRC.App.Configurations
         {
             services.AddScoped<MeuDbContext>();
             services.AddScoped<IGrupoRepository, GrupoRepository>();
+            services.AddScoped<ISubGrupoRepository, SubGrupoRepository>();
             services.AddScoped<ILogAlteracaoRepository, LogAlteracaoRepository>();
 
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IGrupoService, GrupoService>();
+            services.AddScoped<ISubGrupoService, SubGrupoService>();
             services.AddScoped<ILogAlteracaoService, LogAlteracaoService>();
             return services;
         }

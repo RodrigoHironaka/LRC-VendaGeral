@@ -76,6 +76,57 @@ namespace LRC.Data.Migrations
 
                     b.ToTable("LogsAlteracao", (string)null);
                 });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Subgrupo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GrupoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("Situacao")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsuarioAlteracaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupoId")
+                        .IsUnique();
+
+                    b.ToTable("SubGrupos", (string)null);
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Subgrupo", b =>
+                {
+                    b.HasOne("LRC.Business.Entidades.Grupo", "Grupo")
+                        .WithOne("Subgrupo")
+                        .HasForeignKey("LRC.Business.Entidades.Subgrupo", "GrupoId")
+                        .IsRequired();
+
+                    b.Navigation("Grupo");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Grupo", b =>
+                {
+                    b.Navigation("Subgrupo");
+                });
 #pragma warning restore 612, 618
         }
     }

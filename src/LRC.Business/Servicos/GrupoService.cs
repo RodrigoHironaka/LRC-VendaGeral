@@ -15,6 +15,16 @@ namespace LRC.Business.Servicos
         {
             _grupoRepository = grupoRepository;
         }
+        
+        public async Task<Grupo> ObterPorId(Guid id)
+        {
+            return await _grupoRepository.ObterPorId(id);
+        }
+
+        public async Task<List<Grupo>> ObterTodos()
+        {
+            return await _grupoRepository.ObterTodos();
+        }
 
         public async Task Adicionar(Grupo entity)
         {
@@ -28,6 +38,11 @@ namespace LRC.Business.Servicos
             await _grupoRepository.Atualizar(entity);
         }
 
+        public async Task Remover(Guid id)
+        {
+            await _grupoRepository.Remover(id);
+        }
+
         public async Task<IEnumerable<Grupo>> Buscar(Expression<Func<Grupo, bool>> predicate)
         {
             return await _grupoRepository.Buscar(predicate);
@@ -36,21 +51,6 @@ namespace LRC.Business.Servicos
         public void Dispose()
         {
             _grupoRepository?.Dispose();
-        }
-
-        public async Task<Grupo> ObterPorId(Guid id)
-        {
-            return await _grupoRepository.ObterPorId(id);
-        }
-
-        public async Task<List<Grupo>> ObterTodos()
-        {
-            return await _grupoRepository.ObterTodos();
-        }
-
-        public async Task Remover(Guid id)
-        {
-            await _grupoRepository.Remover(id);
         }
     }
 }

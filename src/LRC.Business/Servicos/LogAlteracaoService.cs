@@ -102,11 +102,15 @@ namespace LRC.Business.Servicos
                             historico.AppendLine(String.Format("Campo: {0} | Antes: {1} | Depois: {2}", item.MemberPath, item.Value1, item.Value2));
                         else
                         {
-                            if (item.Value1 != item.Value2)
-                                historico.AppendLine(String.Format("Campo: {0} | Antes: {1} | Depois: {2}", item.MemberPath, item.Value1, item.Value2));
+                            if(!String.IsNullOrEmpty(item.Value1) && !String.IsNullOrEmpty(item.Value2))
+                            {
+                                if (item.Value1 != item.Value2)
+                                    historico.AppendLine(String.Format("Campo: {0} | Antes: {1} | Depois: {2}", item.MemberPath, item.Value1, item.Value2));
+                            }
+                            
                         }
                     }
-                    else
+                    else 
                         historico.AppendLine(String.Format("Campo: {0} | Antes: {1} | Depois: {2}", item.MemberPath, item.Value1, item.Value2));
                 }
             }

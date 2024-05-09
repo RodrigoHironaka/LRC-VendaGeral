@@ -1,10 +1,10 @@
 ﻿
 //Abrir Modal---------------------------------------------------------------------------
-function abrirModal(selector, titulo) {
+function abrirModal(selector, titulo, rota) {
     $(document).on(TipoClick().toString(), selector, function () {
         var id = $(this).attr("data-id");
         $('table').DataTable().destroy();
-        $("#modal").load("/editar/" + id, function () {
+        $("#modal").load(rota + id, function () {
             $(".modal-title").html(titulo);
             $("#modal").modal("show");
         });

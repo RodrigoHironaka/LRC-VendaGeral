@@ -37,7 +37,5 @@ namespace LRC.Business.Servicos
             Notificar(validator);
             return false;
         }
-
-
     }
 }

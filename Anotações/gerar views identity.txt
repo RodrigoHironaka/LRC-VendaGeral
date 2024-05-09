@@ -1,0 +1,5 @@
+D:\_Projetos\LRC-VendaGeral\src\LRC.App>dotnet aspnet-codegenerator identity -dc ApplicationDbContext
+Esta linha de comando para o terminal do VS 2022, serve para gerar as views do identity quando criado automaticamente no projeto
+VC deve usar essa linha "dotnet aspnet-codegenerator identity -dc ApplicationDbContext" dentro da pasta do sistema onde esta o arquivo .csproj
+
+se necessario instalar primeiro o "dotnet tool install --global dotnet-aspnet-codegenerator"

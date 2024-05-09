@@ -9,6 +9,7 @@ namespace LRC.App.AutoMapper
         public AutoMapperConfig()
         {
             CreateMap<Grupo, GrupoVM>().ReverseMap();
+            CreateMap<Subgrupo, SubGrupoVM>().ReverseMap();
         }
     }
 }

@@ -51,8 +51,8 @@
          }
 
         $(document).ready(function () {
-            abrirModal(".novo", "NOVO REGISTRO");
-            abrirModal(".editar", "EDITAR REGISTRO");
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-grupo/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-grupo/");
 
             $('.excluir').click(function () {
                 var itemId = $(this).data('id');
