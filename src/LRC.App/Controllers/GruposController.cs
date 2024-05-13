@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using LRC.App.ViewModels;
 using LRC.Business.Entidades;
+using LRC.Business.Entidades.Validacoes;
 using LRC.Business.Interfaces;
 using LRC.Business.Interfaces.Repositorios;
 using LRC.Business.Interfaces.Servicos;
+using LRC.Business.Notificacoes;
 using LRC.Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -63,9 +65,14 @@ namespace LRC.App.Controllers
         public async Task<IActionResult> Editar(Guid Id, GrupoVM grupoVM)
         {
             if (Id != grupoVM.Id) return NotFound();
-            if (!ModelState.IsValid) return View(grupoVM);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList());
+                return Json(new { success = false, errors, isModelState = true });
+            }
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
+            Grupo grupo;
             if (user != null)
             {
                 if (Id != Guid.Empty)
@@ -75,7 +82,7 @@ namespace LRC.App.Controllers
                     {
                         var grupoClone = await _grupoService.ObterPorId(grupoVM.Id);
                         grupoVM.DataAlteracao = DateTime.Now;
-                        var grupo = _mapper.Map<Grupo>(grupoVM);
+                        grupo = _mapper.Map<Grupo>(grupoVM);
                         grupo.UsuarioAlteracaoId = Guid.Parse(user.Id);
 
                         await _logAlteracaoService.CompararAlteracoes(grupoClone, grupo, Guid.Parse(user.Id), $"Grupo[{grupo.Id}]");
@@ -87,21 +94,25 @@ namespace LRC.App.Controllers
                         await transaction.RollbackAsync();
                         throw new Exception(ex.Message);
                     }
-
                     if (!OperacaoValida())
                     {
                         await transaction.RollbackAsync();
-                        return View(await _grupoService.ObterPorId(Id));
+                        var errors = ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo);
+                        return Json(new { success = false, errors });
                     }
                 }
                 else
                 {
-                    var grupo = _mapper.Map<Grupo>(grupoVM);
+                    grupo = _mapper.Map<Grupo>(grupoVM);
                     grupo.UsuarioCadastroId = Guid.Parse(user.Id);
                     await _grupoService.Adicionar(grupo);
-                    if (!OperacaoValida()) return View(grupoVM);
+                    if (!OperacaoValida()) 
+                    {
+                        var errors = ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo);
+                        return Json(new { success = false, errors });
+                    }
                 }
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             return View(grupoVM);
         }

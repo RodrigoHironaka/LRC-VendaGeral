@@ -11,6 +11,8 @@ using LRC.Business.Servicos;
 using LRC.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using LRC.Business.Notificacoes;
+using LRC.Business.Entidades.Validacoes;
 
 namespace LRC.App.Controllers
 {
@@ -76,9 +78,14 @@ namespace LRC.App.Controllers
         {
 
             if (Id != subGrupoVM.Id) return NotFound();
-            if (!ModelState.IsValid) return View(subGrupoVM);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList());
+                return Json(new { success = false, errors, isModelState = true });
+            }
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
+            Subgrupo subGrupo;
             if (user != null)
             {
                 if (Id != Guid.Empty)
@@ -88,7 +95,7 @@ namespace LRC.App.Controllers
                     {
                         var subGrupoClone = await _subGrupoRepository.ObterPorIdComGrupo(Id);
                         subGrupoVM.DataAlteracao = DateTime.Now;
-                        var subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
+                        subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
                         subGrupo.UsuarioAlteracaoId = Guid.Parse(user.Id);
                         subGrupo.Grupo = await _grupoService.ObterPorId(subGrupoVM.GrupoId);
                         await _logAlteracaoService.CompararAlteracoes(subGrupoClone, subGrupo, Guid.Parse(user.Id), $"SubGrupo[{subGrupo.Id}]");
@@ -104,18 +111,23 @@ namespace LRC.App.Controllers
                     if (!OperacaoValida())
                     {
                         await transaction.RollbackAsync();
-                        return View(await _subGrupoService.ObterPorId(Id));
+                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
+                        return Json(new { success = false, errors });
                     }
                 }
                 else
                 {
                     subGrupoVM = await PopularGrupos(subGrupoVM);
-                    var subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
+                    subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
                     subGrupo.UsuarioCadastroId = Guid.Parse(user.Id);
                     await _subGrupoService.Adicionar(subGrupo);
-                    if (!OperacaoValida()) return View(subGrupoVM);
+                    if (!OperacaoValida())
+                    {
+                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
+                        return Json(new { success = false, errors });
+                    }
                 }
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             return View(subGrupoVM);
         }
