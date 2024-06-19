@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using LRC.App.ViewModels;
-using LRC.Business.Entidades;
-using LRC.Business.Interfaces;
 using LRC.Business.Interfaces.Repositorios;
 using LRC.Business.Interfaces.Servicos;
-using LRC.Business.Notificacoes;
+using LRC.Business.Interfaces;
 using LRC.Data.Context;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using LRC.App.ViewModels;
@@ -15,6 +11,8 @@ using LRC.Business.Servicos;
 using LRC.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using LRC.Business.Notificacoes;
+using LRC.Business.Entidades.Validacoes;
 
 namespace LRC.App.Controllers
 {
@@ -78,6 +76,7 @@ namespace LRC.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(Guid Id, SubGrupoVM subGrupoVM)
         {
+
             if (Id != subGrupoVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
@@ -89,10 +88,10 @@ namespace LRC.App.Controllers
             Subgrupo subGrupo;
             if (user != null)
             {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
+                if (Id != Guid.Empty)
                 {
-                    if (Id != Guid.Empty)
+                    using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
                     {
                         var subGrupoClone = await _subGrupoRepository.ObterPorIdComGrupo(Id);
                         subGrupoVM.DataAlteracao = DateTime.Now;
@@ -112,18 +111,23 @@ namespace LRC.App.Controllers
                     if (!OperacaoValida())
                     {
                         await transaction.RollbackAsync();
-                        return View(await _subGrupoService.ObterPorId(Id));
+                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
+                        return Json(new { success = false, errors });
                     }
                 }
                 else
                 {
                     subGrupoVM = await PopularGrupos(subGrupoVM);
-                    var subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
+                    subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
                     subGrupo.UsuarioCadastroId = Guid.Parse(user.Id);
                     await _subGrupoService.Adicionar(subGrupo);
-                    if (!OperacaoValida()) return View(subGrupoVM);
+                    if (!OperacaoValida())
+                    {
+                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
+                        return Json(new { success = false, errors });
+                    }
                 }
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             return View(subGrupoVM);
         }
@@ -151,10 +155,10 @@ namespace LRC.App.Controllers
                 throw new Exception(ex.Message);
             }
 
-            if (!OperacaoValida())
-            {
+            if (!OperacaoValida()) 
+            { 
                 //await transaction.RollbackAsync(); 
-                return View(subGrupo);
+                return View(subGrupo); 
             }
 
             return RedirectToAction("Index");
@@ -166,7 +170,7 @@ namespace LRC.App.Controllers
             var gruposVM = _mapper.Map<IEnumerable<GrupoVM>>(grupos);
             gruposVM = gruposVM.OrderBy(x => x.Nome);
             subGrupo.Grupos = gruposVM;
-
+            
             //subGrupo.Grupos = _mapper.Map<IEnumerable<GrupoVM>>(await _grupoService.Buscar(x => x.Situacao == Business.Entidades.Enums.Situacao.Ativo));
             return subGrupo;
         }

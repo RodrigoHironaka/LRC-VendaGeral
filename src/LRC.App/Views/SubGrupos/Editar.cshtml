@@ -12,10 +12,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="javascript:window.location.reload()"></button>
         </div>
         <div class="modal-body">
-            <vc:Summary></vc:Summary>
             <form asp-action="Editar" id="frm">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="UsuarioCadastroId" />
                 <input type="hidden" asp-for="UsuarioAlteracaoId" />

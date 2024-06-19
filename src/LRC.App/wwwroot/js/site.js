@@ -24,43 +24,37 @@ function Salvar(formId, url) {
     $.ajax({
         type: "POST",
         url: url,
-        method: method,
-        data: data,
-        success: successCallback,
-        error: errorCallback
-    });
-}
-function processarRespostaSucesso(retorno) {
-    if (retorno == "") {
-        location.reload();
-    } else {
-        $("#modal").html(retorno);
-        if ($("#id").val() > 0)
-            $(".modal-title").html("ALTERANDO REGISTRO");
-        else
-            $(".modal-title").html("NOVO REGISTRO");
-    }
-}
-function processarRespostaErro(retorno) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro com o status: ' + retorno.status + '. O log foi gerado, entre em contato com o suporte!',
-    });
-}
-function Salvar(formId, url) {
-    var dados = $("#" + formId).serialize();
-    enviarAjax(url, 'POST', dados, function (retorno) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Sucesso!',
-            text: 'Operação realizada com sucesso.',
-            timer: 5000
-        }).then(function () {
-            location.reload();
-        });
-    }, function (retorno) {
-        processarRespostaErro(retorno);
+        data: $("#" + formId).serialize(),
+        success: function (response) {
+            if (response.success) {
+                // Sucesso: fechar a modal e atualizar a página
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: 'Operação realizada com sucesso.',
+                    timer: 5000
+                }).then(function () {
+                    $('#modal').modal('hide');
+                    // Após o popup ser fechado, recarrega a página
+                    window.location.reload();
+                });
+            }
+            else if (response.isModelState) {
+                // Erros de validação: atualizar os spans de validação na modal
+                $.each(response.errors, function (key, value) {
+                    var errorMessage = $("<span class='text-danger'></span>").text(value);
+                    $("#" + key).siblings(".text-danger").remove(); // Remove erros antigos, se houver
+                    $("#" + key).parent().append(errorMessage); // Adiciona o novo erro
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.errors,
+                });
+            }
+        }
     });
 }
 
