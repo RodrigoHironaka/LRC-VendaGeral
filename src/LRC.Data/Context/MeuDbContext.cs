@@ -1,4 +1,5 @@
 ﻿using LRC.Business.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LRC.Data.Context
 {
-    public class MeuDbContext : DbContext
+    public class MeuDbContext : IdentityDbContext
     {
         public MeuDbContext(DbContextOptions options) : base(options) 
         {
