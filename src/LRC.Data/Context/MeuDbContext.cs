@@ -1,4 +1,5 @@
 ﻿using LRC.Business.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LRC.Data.Context
 {
-    public class MeuDbContext : DbContext
+    public class MeuDbContext : IdentityDbContext
     {
         public MeuDbContext(DbContextOptions options) : base(options) 
         {
@@ -39,6 +40,11 @@ namespace LRC.Data.Context
                 entity.Ignore(e => e.DataAlteracao);
                 entity.Ignore(e => e.UsuarioAlteracaoId);
             });
+
+            modelBuilder.Entity<Subgrupo>()
+            .HasIndex(s => s.GrupoId)
+            .IsUnique(false);
+
 
             base.OnModelCreating(modelBuilder);
         }

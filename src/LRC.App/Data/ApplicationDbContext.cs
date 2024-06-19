@@ -10,6 +10,5 @@ namespace LRC.App.Data
             : base(options)
         {
         }
-        public DbSet<LRC.App.ViewModels.SubGrupoVM> SubGrupoVM { get; set; } = default!;
     }
 }
