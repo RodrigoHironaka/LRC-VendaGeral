@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LRC.App.Controllers
 {
@@ -92,7 +93,7 @@ namespace LRC.App.Controllers
                     catch (Exception ex)
                     {
                         await transaction.RollbackAsync();
-                        throw new Exception(ex.Message);
+                        return Json(new { success = false, errors = ex.Message });
                     }
                     if (!OperacaoValida())
                     {

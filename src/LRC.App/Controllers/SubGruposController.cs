@@ -105,7 +105,7 @@ namespace LRC.App.Controllers
                     catch (Exception ex)
                     {
                         await transaction.RollbackAsync();
-                        throw new Exception(ex.Message);
+                        return Json(new { success = false, errors = ex.Message });
                     }
 
                     if (!OperacaoValida())
@@ -157,7 +157,7 @@ namespace LRC.App.Controllers
 
             if (!OperacaoValida()) 
             { 
-                //await transaction.RollbackAsync(); 
+                await transaction.RollbackAsync(); 
                 return View(subGrupo); 
             }
 

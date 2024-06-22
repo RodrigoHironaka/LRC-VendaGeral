@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace LRC.Business.Entidades
 {
-    public class Subgrupo : Entidade
+    public class Produto : Entidade
     {
         public string? Nome { get; set; }
+        public string? Descricao { get; set; }
+        public string? Valor { get; set; }
+        public Int32? Quantidade { get; set; }
         public Situacao? Situacao { get; set; }
 
-        public Guid GrupoId { get; set; }
-        public Grupo? Grupo { get; set; }
-
-        public Produto? Produto { get; set; }
+        public Guid SubgrupoId { get; set; }
+        public Subgrupo? Subgrupo { get; set; }
     }
 }
