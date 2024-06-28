@@ -16,10 +16,11 @@ namespace LRC.Business.Entidades.Validacoes
             .Length(2, 100).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLenght} caracteres");
 
             RuleFor(x => x.SubgrupoId)
-           .NotNull().WithMessage("O campo Subgrupo é obrigatório!");
+            .NotEmpty().WithMessage("O campo Grupo/Subgrupo precisa ser fornecido")
+            .NotNull().WithMessage("O campo Grupo/Subgrupo é obrigatório!");
 
             RuleFor(x => x.Situacao)
-           .NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
+            .NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
         }
     }
 }

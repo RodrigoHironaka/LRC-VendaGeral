@@ -32,7 +32,8 @@
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Grupo.Nome)
+                    @if(item.Grupo != null)
+                        @Html.DisplayFor(modelItem =>  item.Grupo.Nome)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Situacao)

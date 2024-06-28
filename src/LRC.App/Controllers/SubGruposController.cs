@@ -1,18 +1,14 @@
 ﻿using AutoMapper;
-using LRC.Business.Interfaces.Repositorios;
-using LRC.Business.Interfaces.Servicos;
-using LRC.Business.Interfaces;
-using LRC.Data.Context;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using LRC.App.ViewModels;
 using LRC.Business.Entidades;
-using LRC.Business.Servicos;
-using LRC.Data.Repository;
-using Microsoft.AspNetCore.Authorization;
-using System.Text.RegularExpressions;
-using LRC.Business.Notificacoes;
 using LRC.Business.Entidades.Validacoes;
+using LRC.Business.Interfaces;
+using LRC.Business.Interfaces.Repositorios;
+using LRC.Business.Interfaces.Servicos;
+using LRC.Data.Context;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LRC.App.Controllers
 {
@@ -76,7 +72,6 @@ namespace LRC.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(Guid Id, SubGrupoVM subGrupoVM)
         {
-
             if (Id != subGrupoVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
@@ -86,12 +81,13 @@ namespace LRC.App.Controllers
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
             Subgrupo subGrupo;
+
             if (user != null)
             {
-                if (Id != Guid.Empty)
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
                 {
-                    using var transaction = await _context.Database.BeginTransactionAsync();
-                    try
+                    if (Id != Guid.Empty)
                     {
                         var subGrupoClone = await _subGrupoRepository.ObterPorIdComGrupo(Id);
                         subGrupoVM.DataAlteracao = DateTime.Now;
@@ -100,33 +96,29 @@ namespace LRC.App.Controllers
                         subGrupo.Grupo = await _grupoService.ObterPorId(subGrupoVM.GrupoId);
                         await _logAlteracaoService.CompararAlteracoes(subGrupoClone, subGrupo, Guid.Parse(user.Id), $"SubGrupo[{subGrupo.Id}]");
                         await _subGrupoService.Atualizar(subGrupo);
-                        await transaction.CommitAsync();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        await transaction.RollbackAsync();
-                        return Json(new { success = false, errors = ex.Message });
+                        subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
+                        subGrupo.UsuarioCadastroId = Guid.Parse(user.Id);
+                        await _subGrupoService.Adicionar(subGrupo);
                     }
-
                     if (!OperacaoValida())
                     {
                         await transaction.RollbackAsync();
-                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
+                        List<string> errors = new List<string>();
+                        errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
+                        errors.Add(ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo));
                         return Json(new { success = false, errors });
                     }
+                    await transaction.CommitAsync();
                 }
-                else
+                catch (Exception ex)
                 {
-                    subGrupoVM = await PopularGrupos(subGrupoVM);
-                    subGrupo = _mapper.Map<Subgrupo>(subGrupoVM);
-                    subGrupo.UsuarioCadastroId = Guid.Parse(user.Id);
-                    await _subGrupoService.Adicionar(subGrupo);
-                    if (!OperacaoValida())
-                    {
-                        var errors = ObterNotificacoes.ExecutarValidacao(new SubGrupoValidation(), subGrupo);
-                        return Json(new { success = false, errors });
-                    }
+                    await transaction.RollbackAsync();
+                    return Json(new { success = false, errors = ex.Message });
                 }
+               
                 return Json(new { success = true });
             }
             return View(subGrupoVM);
@@ -141,8 +133,9 @@ namespace LRC.App.Controllers
             if (subGrupo == null) return NotFound();
             IdentityUser? user = await _userManager.GetUserAsync(User);
 
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            if(user == null) return NotFound();
 
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {subGrupo.Nome} excluído.", Guid.Parse(user.Id), $"SubGrupo[{subGrupo.Id}]");

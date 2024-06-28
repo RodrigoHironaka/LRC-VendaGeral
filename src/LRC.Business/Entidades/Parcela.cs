@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,13 @@ namespace LRC.Business.Entidades
         public decimal ValorPago { get; set; }
         public decimal ValorAberto { get; set; }
         public string? Observacao { get; set; }
-        public SituacaoParcela SituacaoParcela { get; set; }
+        public SituacaoParcela SituacaoParcela { get; set; } = SituacaoParcela.Pendente;
 
         public Guid FormaPagamentoId { get; set; }
         public FormaPagamento? FormaPagamento { get; set; }
+
+        public Guid PedidoId { get; set; }
+        public Pedido? Pedido { get; set; }
 
         public Guid ContaReceberId { get; set; }
         public ContaReceber? ContaReceber { get; set; }

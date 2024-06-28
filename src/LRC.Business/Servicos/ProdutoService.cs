@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LRC.Business.Servicos
 {
-    internal class ProdutoService : BaseService, IProdutoService
+    public class ProdutoService : BaseService, IProdutoService
     {
         private readonly IProdutoRepository _produtoRepository;
 

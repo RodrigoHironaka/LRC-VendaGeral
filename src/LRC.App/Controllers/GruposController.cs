@@ -74,12 +74,13 @@ namespace LRC.App.Controllers
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
             Grupo grupo;
+
             if (user != null)
             {
-                if (Id != Guid.Empty)
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
                 {
-                    using var transaction = await _context.Database.BeginTransactionAsync();
-                    try
+                    if (Id != Guid.Empty)
                     {
                         var grupoClone = await _grupoService.ObterPorId(grupoVM.Id);
                         grupoVM.DataAlteracao = DateTime.Now;
@@ -90,29 +91,28 @@ namespace LRC.App.Controllers
                         await _grupoService.Atualizar(grupo);
                         await transaction.CommitAsync();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        await transaction.RollbackAsync();
-                        return Json(new { success = false, errors = ex.Message });
+                        grupo = _mapper.Map<Grupo>(grupoVM);
+                        grupo.UsuarioCadastroId = Guid.Parse(user.Id);
+                        await _grupoService.Adicionar(grupo);
                     }
+
                     if (!OperacaoValida())
                     {
                         await transaction.RollbackAsync();
-                        var errors = ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo);
+                        List<string> errors = new List<string>();
+                        errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
+                        errors.Add(ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo));
                         return Json(new { success = false, errors });
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    grupo = _mapper.Map<Grupo>(grupoVM);
-                    grupo.UsuarioCadastroId = Guid.Parse(user.Id);
-                    await _grupoService.Adicionar(grupo);
-                    if (!OperacaoValida()) 
-                    {
-                        var errors = ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo);
-                        return Json(new { success = false, errors });
-                    }
+                    await transaction.RollbackAsync();
+                    return Json(new { success = false, errors = ex.Message });
                 }
+                
                 return Json(new { success = true });
             }
             return View(grupoVM);
@@ -126,6 +126,7 @@ namespace LRC.App.Controllers
             var grupo = await _grupoService.ObterPorId(id);
             IdentityUser? user = await _userManager.GetUserAsync(User);
             if (grupo == null) return NotFound();
+            if (user == null) return NotFound();
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try

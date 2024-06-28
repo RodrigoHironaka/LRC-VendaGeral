@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LRC.Business.Entidades
         
         public Guid FormaPagamentoId { get; set; }
         public FormaPagamento? FormaPagamento { get; set; }
-        
+
         public Guid CaixaId { get; set; }
         public Caixa? Caixa { get; set; }
     }

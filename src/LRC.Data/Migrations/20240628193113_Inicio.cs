@@ -51,7 +51,7 @@ namespace LRC.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Caixas",
+                name: "Caixa",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -65,7 +65,7 @@ namespace LRC.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Caixas", x => x.Id);
+                    table.PrimaryKey("PK_Caixa", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,7 +88,12 @@ namespace LRC.Data.Migrations
                     Celular = table.Column<string>(type: "varchar(20)", nullable: false),
                     Celular2 = table.Column<string>(type: "varchar(20)", nullable: false),
                     Email = table.Column<string>(type: "varchar(100)", nullable: false),
-                    TipoPessoa = table.Column<int>(type: "int", nullable: false)
+                    TipoPessoa = table.Column<int>(type: "int", nullable: false),
+                    Logradouro = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    Numero = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
+                    Bairro = table.Column<string>(type: "varchar(70)", maxLength: 70, nullable: true),
+                    Complemento = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true),
+                    Referencia = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,61 +101,7 @@ namespace LRC.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Colaboradores",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Admissao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Demissao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Situacao = table.Column<int>(type: "int", nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RazaoSocial = table.Column<string>(type: "varchar(100)", nullable: true),
-                    NomeFantasia = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Nascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Documento = table.Column<long>(type: "bigint", nullable: false),
-                    Documento2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Telefone = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Celular = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Celular2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Email = table.Column<string>(type: "varchar(100)", nullable: true),
-                    TipoPessoa = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Colaboradores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Entregadores",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Situacao = table.Column<int>(type: "int", nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RazaoSocial = table.Column<string>(type: "varchar(100)", nullable: true),
-                    NomeFantasia = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Nascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Documento = table.Column<long>(type: "bigint", nullable: false),
-                    Documento2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Telefone = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Celular = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Celular2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Email = table.Column<string>(type: "varchar(100)", nullable: true),
-                    TipoPessoa = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Entregadores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FormasPagamento",
+                name: "FormaPagamento",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -165,11 +116,11 @@ namespace LRC.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FormasPagamento", x => x.Id);
+                    table.PrimaryKey("PK_FormaPagamento", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Fornecedores",
+                name: "Fornecedor",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -187,11 +138,16 @@ namespace LRC.Data.Migrations
                     Celular = table.Column<string>(type: "varchar(100)", nullable: true),
                     Celular2 = table.Column<string>(type: "varchar(100)", nullable: true),
                     Email = table.Column<string>(type: "varchar(100)", nullable: true),
-                    TipoPessoa = table.Column<int>(type: "int", nullable: false)
+                    TipoPessoa = table.Column<int>(type: "int", nullable: false),
+                    Endereco_Logradouro = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Endereco_Numero = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Endereco_Bairro = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Endereco_Complemento = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Endereco_Referencia = table.Column<string>(type: "varchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fornecedores", x => x.Id);
+                    table.PrimaryKey("PK_Fornecedor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -333,33 +289,7 @@ namespace LRC.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContasReceber",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", nullable: true),
-                    DataEmissao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NumeroDocumento = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Observacao = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Situacao = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContasReceber", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContasReceber_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FluxosCaixa",
+                name: "FluxoCaixa",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -375,21 +305,91 @@ namespace LRC.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FluxosCaixa", x => x.Id);
+                    table.PrimaryKey("PK_FluxoCaixa", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FluxosCaixa_Caixas_CaixaId",
+                        name: "FK_FluxoCaixa_Caixa_CaixaId",
                         column: x => x.CaixaId,
-                        principalTable: "Caixas",
+                        principalTable: "Caixa",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_FluxosCaixa_FormasPagamento_FormaPagamentoId",
+                        name: "FK_FluxoCaixa_FormaPagamento_FormaPagamentoId",
                         column: x => x.FormaPagamentoId,
-                        principalTable: "FormasPagamento",
+                        principalTable: "FormaPagamento",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContasPagar",
+                name: "Pedido",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Numero = table.Column<long>(type: "bigint", nullable: false),
+                    TipoPedido = table.Column<int>(type: "int", nullable: false),
+                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFinalizacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Situacao = table.Column<int>(type: "int", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TrocoPara = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Troco = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Mesa = table.Column<int>(type: "int", nullable: false),
+                    MesaPorPessoa = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Observacao = table.Column<string>(type: "varchar(100)", nullable: true),
+                    ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FormaPagamentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pedido", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pedido_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pedido_FormaPagamento_FormaPagamentoId",
+                        column: x => x.FormaPagamentoId,
+                        principalTable: "FormaPagamento",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContaPagar",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Descricao = table.Column<string>(type: "varchar(100)", nullable: true),
+                    DataEmissao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumeroDocumento = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Observacao = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Situacao = table.Column<int>(type: "int", nullable: false),
+                    ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FornecedorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContaPagar", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContaPagar_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ContaPagar_Fornecedor_FornecedorId",
+                        column: x => x.FornecedorId,
+                        principalTable: "Fornecedor",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContaReceber",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -407,62 +407,16 @@ namespace LRC.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContasPagar", x => x.Id);
+                    table.PrimaryKey("PK_ContaReceber", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContasPagar_Clientes_ClienteId",
+                        name: "FK_ContaReceber_Clientes_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ContasPagar_Fornecedores_FornecedorId",
+                        name: "FK_ContaReceber_Fornecedor_FornecedorId",
                         column: x => x.FornecedorId,
-                        principalTable: "Fornecedores",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Enderecos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Logradouro = table.Column<string>(type: "varchar(200)", nullable: false),
-                    Numero = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Bairro = table.Column<string>(type: "varchar(100)", nullable: false),
-                    Complemento = table.Column<string>(type: "varchar(250)", nullable: false),
-                    Referencia = table.Column<string>(type: "varchar(8)", nullable: false),
-                    Principal = table.Column<bool>(type: "bit", nullable: false),
-                    Situacao = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ColaboradorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EntregadorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FornecedorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Enderecos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Enderecos_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Enderecos_Colaboradores_ColaboradorId",
-                        column: x => x.ColaboradorId,
-                        principalTable: "Colaboradores",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Enderecos_Entregadores_EntregadorId",
-                        column: x => x.EntregadorId,
-                        principalTable: "Entregadores",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Enderecos_Fornecedores_FornecedorId",
-                        column: x => x.FornecedorId,
-                        principalTable: "Fornecedores",
+                        principalTable: "Fornecedor",
                         principalColumn: "Id");
                 });
 
@@ -472,7 +426,7 @@ namespace LRC.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "varchar(200)", nullable: false),
-                    Situacao = table.Column<int>(type: "int", nullable: true),
+                    Situacao = table.Column<int>(type: "int", nullable: false),
                     GrupoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -490,7 +444,7 @@ namespace LRC.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parcelas",
+                name: "Parcela",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -509,6 +463,7 @@ namespace LRC.Data.Migrations
                     Observacao = table.Column<string>(type: "varchar(100)", nullable: true),
                     SituacaoParcela = table.Column<int>(type: "int", nullable: false),
                     FormaPagamentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PedidoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ContaReceberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ContaPagarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -518,21 +473,26 @@ namespace LRC.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parcelas", x => x.Id);
+                    table.PrimaryKey("PK_Parcela", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parcelas_ContasPagar_ContaPagarId",
+                        name: "FK_Parcela_ContaPagar_ContaPagarId",
                         column: x => x.ContaPagarId,
-                        principalTable: "ContasPagar",
+                        principalTable: "ContaPagar",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Parcelas_ContasReceber_ContaReceberId",
+                        name: "FK_Parcela_ContaReceber_ContaReceberId",
                         column: x => x.ContaReceberId,
-                        principalTable: "ContasReceber",
+                        principalTable: "ContaReceber",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Parcelas_FormasPagamento_FormaPagamentoId",
+                        name: "FK_Parcela_FormaPagamento_FormaPagamentoId",
                         column: x => x.FormaPagamentoId,
-                        principalTable: "FormasPagamento",
+                        principalTable: "FormaPagamento",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Parcela_Pedido_PedidoId",
+                        column: x => x.PedidoId,
+                        principalTable: "Pedido",
                         principalColumn: "Id");
                 });
 
@@ -543,9 +503,10 @@ namespace LRC.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "varchar(200)", nullable: false),
                     Descricao = table.Column<string>(type: "varchar(8000)", nullable: false),
-                    Valor = table.Column<string>(type: "varchar(100)", precision: 10, scale: 2, nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: true),
-                    Situacao = table.Column<int>(type: "int", nullable: true),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantidade = table.Column<decimal>(type: "decimal(10,3)", precision: 10, scale: 3, nullable: false),
+                    UnidadeMedida = table.Column<int>(type: "int", nullable: false),
+                    Situacao = table.Column<int>(type: "int", nullable: false),
                     SubgrupoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -559,6 +520,37 @@ namespace LRC.Data.Migrations
                         name: "FK_Produtos_SubGrupos_SubgrupoId",
                         column: x => x.SubgrupoId,
                         principalTable: "SubGrupos",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PedidoItem",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UnidadeMedida = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PedidoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProdutoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PedidoItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PedidoItem_Pedido_PedidoId",
+                        column: x => x.PedidoId,
+                        principalTable: "Pedido",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PedidoItem_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
                         principalColumn: "Id");
                 });
 
@@ -602,64 +594,74 @@ namespace LRC.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContasPagar_ClienteId",
-                table: "ContasPagar",
+                name: "IX_ContaPagar_ClienteId",
+                table: "ContaPagar",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContasPagar_FornecedorId",
-                table: "ContasPagar",
+                name: "IX_ContaPagar_FornecedorId",
+                table: "ContaPagar",
                 column: "FornecedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContasReceber_ClienteId",
-                table: "ContasReceber",
+                name: "IX_ContaReceber_ClienteId",
+                table: "ContaReceber",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_ClienteId",
-                table: "Enderecos",
-                column: "ClienteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_ColaboradorId",
-                table: "Enderecos",
-                column: "ColaboradorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_EntregadorId",
-                table: "Enderecos",
-                column: "EntregadorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_FornecedorId",
-                table: "Enderecos",
+                name: "IX_ContaReceber_FornecedorId",
+                table: "ContaReceber",
                 column: "FornecedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FluxosCaixa_CaixaId",
-                table: "FluxosCaixa",
+                name: "IX_FluxoCaixa_CaixaId",
+                table: "FluxoCaixa",
                 column: "CaixaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FluxosCaixa_FormaPagamentoId",
-                table: "FluxosCaixa",
+                name: "IX_FluxoCaixa_FormaPagamentoId",
+                table: "FluxoCaixa",
                 column: "FormaPagamentoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parcelas_ContaPagarId",
-                table: "Parcelas",
+                name: "IX_Parcela_ContaPagarId",
+                table: "Parcela",
                 column: "ContaPagarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parcelas_ContaReceberId",
-                table: "Parcelas",
+                name: "IX_Parcela_ContaReceberId",
+                table: "Parcela",
                 column: "ContaReceberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parcelas_FormaPagamentoId",
-                table: "Parcelas",
+                name: "IX_Parcela_FormaPagamentoId",
+                table: "Parcela",
                 column: "FormaPagamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parcela_PedidoId",
+                table: "Parcela",
+                column: "PedidoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pedido_ClienteId",
+                table: "Pedido",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pedido_FormaPagamentoId",
+                table: "Pedido",
+                column: "FormaPagamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidoItem_PedidoId",
+                table: "PedidoItem",
+                column: "PedidoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidoItem_ProdutoId",
+                table: "PedidoItem",
+                column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produtos_SubgrupoId",
@@ -691,19 +693,16 @@ namespace LRC.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Enderecos");
-
-            migrationBuilder.DropTable(
-                name: "FluxosCaixa");
+                name: "FluxoCaixa");
 
             migrationBuilder.DropTable(
                 name: "LogsAlteracao");
 
             migrationBuilder.DropTable(
-                name: "Parcelas");
+                name: "Parcela");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "PedidoItem");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -712,31 +711,31 @@ namespace LRC.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Colaboradores");
+                name: "Caixa");
 
             migrationBuilder.DropTable(
-                name: "Entregadores");
+                name: "ContaPagar");
 
             migrationBuilder.DropTable(
-                name: "Caixas");
+                name: "ContaReceber");
 
             migrationBuilder.DropTable(
-                name: "ContasPagar");
+                name: "Pedido");
 
             migrationBuilder.DropTable(
-                name: "ContasReceber");
+                name: "Produtos");
 
             migrationBuilder.DropTable(
-                name: "FormasPagamento");
-
-            migrationBuilder.DropTable(
-                name: "SubGrupos");
-
-            migrationBuilder.DropTable(
-                name: "Fornecedores");
+                name: "Fornecedor");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "FormaPagamento");
+
+            migrationBuilder.DropTable(
+                name: "SubGrupos");
 
             migrationBuilder.DropTable(
                 name: "Grupos");

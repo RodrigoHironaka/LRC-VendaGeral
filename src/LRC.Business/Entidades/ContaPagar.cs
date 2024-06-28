@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace LRC.Business.Entidades
     public class ContaPagar: Entidade
     {
         public string? Descricao { get; set; }
-        public DateTime? DataEmissao { get; set; }
+        public DateTime DataEmissao { get; set; }
         public string? NumeroDocumento { get; set; }
         public string? Observacao { get; set; }
         public SituacaoConta Situacao { get; set; }
@@ -21,6 +22,7 @@ namespace LRC.Business.Entidades
         public Guid FornecedorId { get; set; }
         public Fornecedor? Fornecedor { get; set; }
 
-        public IList<Parcela>? Parcelas { get; set; } = new List<Parcela>();
+        public ICollection<Parcela> Parcelas { get; set; } = new List<Parcela>();
+        
     }
 }

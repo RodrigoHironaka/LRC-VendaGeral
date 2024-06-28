@@ -1,17 +1,12 @@
 ﻿using LRC.Business.Entidades.Enums;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace LRC.App.ViewModels
 {
     public class SubGrupoVM
     {
-        public SubGrupoVM()
-        {
-            Situacao = Business.Entidades.Enums.Situacao.Ativo;
-        }
         [Key]
         public Guid Id { get; set; }
 
@@ -22,10 +17,10 @@ namespace LRC.App.ViewModels
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Grupo")]
         public Guid GrupoId { get; set; }
-        
+
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Situação")]
-        public Situacao? Situacao { get; set; }
+        public Situacao? Situacao { get; set; } = Business.Entidades.Enums.Situacao.Ativo;
 
         [ScaffoldColumn(false)]
         public DateTime DataCadastro { get; set; }

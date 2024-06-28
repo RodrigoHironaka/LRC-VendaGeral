@@ -51,7 +51,7 @@ namespace LRC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Caixas");
+                    b.ToTable("Caixa");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Cliente", b =>
@@ -61,11 +61,9 @@ namespace LRC.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Celular")
-                        .IsRequired()
                         .HasColumnType("varchar(20)");
 
                     b.Property<string>("Celular2")
-                        .IsRequired()
                         .HasColumnType("varchar(20)");
 
                     b.Property<DateTime>("DataAlteracao")
@@ -78,18 +76,15 @@ namespace LRC.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Documento2")
-                        .IsRequired()
                         .HasColumnType("varchar(20)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("Nascimento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NomeFantasia")
-                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("RazaoSocial")
@@ -97,14 +92,12 @@ namespace LRC.Data.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Responsaveis")
-                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.Property<int>("Situacao")
                         .HasColumnType("int");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("varchar(20)");
 
                     b.Property<int>("TipoPessoa")
@@ -121,20 +114,14 @@ namespace LRC.Data.Migrations
                     b.ToTable("Clientes", (string)null);
                 });
 
-            modelBuilder.Entity("LRC.Business.Entidades.Colaborador", b =>
+            modelBuilder.Entity("LRC.Business.Entidades.ContaPagar", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Admissao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Celular")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Celular2")
-                        .HasColumnType("varchar(100)");
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
@@ -142,34 +129,22 @@ namespace LRC.Data.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("Demissao")
+                    b.Property<DateTime>("DataEmissao")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("Documento")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Documento2")
+                    b.Property<string>("Descricao")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Email")
+                    b.Property<Guid>("FornecedorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NumeroDocumento")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime?>("Nascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NomeFantasia")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("RazaoSocial")
+                    b.Property<string>("Observacao")
                         .HasColumnType("varchar(100)");
 
                     b.Property<int>("Situacao")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telefone")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("TipoPessoa")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UsuarioAlteracaoId")
@@ -180,10 +155,14 @@ namespace LRC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colaboradores");
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("FornecedorId");
+
+                    b.ToTable("ContaPagar");
                 });
 
-            modelBuilder.Entity("LRC.Business.Entidades.ContaPagar", b =>
+            modelBuilder.Entity("LRC.Business.Entidades.ContaReceber", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,175 +207,7 @@ namespace LRC.Data.Migrations
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("ContasPagar");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.ContaReceber", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataEmissao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("NumeroDocumento")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Observacao")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("Situacao")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.ToTable("ContasReceber");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Endereco", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ColaboradorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Complemento")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EntregadorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("FornecedorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Logradouro")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Numero")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool>("Principal")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Referencia")
-                        .IsRequired()
-                        .HasColumnType("varchar(8)");
-
-                    b.Property<int>("Situacao")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("ColaboradorId");
-
-                    b.HasIndex("EntregadorId");
-
-                    b.HasIndex("FornecedorId");
-
-                    b.ToTable("Enderecos", (string)null);
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Celular")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Celular2")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Documento")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Documento2")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("Nascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NomeFantasia")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("RazaoSocial")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("Situacao")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telefone")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("TipoPessoa")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Entregadores");
+                    b.ToTable("ContaReceber");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.FluxoCaixa", b =>
@@ -438,7 +249,7 @@ namespace LRC.Data.Migrations
 
                     b.HasIndex("FormaPagamentoId");
 
-                    b.ToTable("FluxosCaixa");
+                    b.ToTable("FluxoCaixa");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.FormaPagamento", b =>
@@ -473,7 +284,7 @@ namespace LRC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FormasPagamento");
+                    b.ToTable("FormaPagamento");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Fornecedor", b =>
@@ -529,7 +340,7 @@ namespace LRC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fornecedores");
+                    b.ToTable("Fornecedor");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Grupo", b =>
@@ -635,6 +446,9 @@ namespace LRC.Data.Migrations
                     b.Property<string>("ParcelaDe")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid>("PedidoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("SituacaoParcela")
                         .HasColumnType("int");
 
@@ -664,7 +478,120 @@ namespace LRC.Data.Migrations
 
                     b.HasIndex("FormaPagamentoId");
 
-                    b.ToTable("Parcelas");
+                    b.HasIndex("PedidoId");
+
+                    b.ToTable("Parcela");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Pedido", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataFinalizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataPedido")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FormaPagamentoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Mesa")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MesaPorPessoa")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<long>("Numero")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Observacao")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Situacao")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoPedido")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Troco")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TrocoPara")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UsuarioAlteracaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("FormaPagamentoId");
+
+                    b.ToTable("Pedido");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.PedidoItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PedidoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProdutoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UnidadeMedida")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsuarioAlteracaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("PedidoItem");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Produto", b =>
@@ -687,14 +614,18 @@ namespace LRC.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("Quantidade")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("decimal(10,3)");
 
-                    b.Property<int?>("Situacao")
+                    b.Property<int>("Situacao")
                         .HasColumnType("int");
 
                     b.Property<Guid>("SubgrupoId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UnidadeMedida")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UsuarioAlteracaoId")
                         .HasColumnType("uniqueidentifier");
@@ -702,10 +633,8 @@ namespace LRC.Data.Migrations
                     b.Property<Guid>("UsuarioCadastroId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Valor")
-                        .IsRequired()
-                        .HasPrecision(10, 2)
-                        .HasColumnType("varchar(100)");
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -733,7 +662,7 @@ namespace LRC.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("Situacao")
+                    b.Property<int>("Situacao")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UsuarioAlteracaoId")
@@ -951,15 +880,58 @@ namespace LRC.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LRC.Business.Entidades.Cliente", b =>
+                {
+                    b.OwnsOne("LRC.Business.Entidades.Componentes.Endereco", "Endereco", b1 =>
+                        {
+                            b1.Property<Guid>("ClienteId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Bairro")
+                                .HasMaxLength(70)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Bairro");
+
+                            b1.Property<string>("Complemento")
+                                .HasMaxLength(150)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Complemento");
+
+                            b1.Property<string>("Logradouro")
+                                .HasMaxLength(100)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Logradouro");
+
+                            b1.Property<string>("Numero")
+                                .HasMaxLength(30)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Numero");
+
+                            b1.Property<string>("Referencia")
+                                .HasMaxLength(150)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Referencia");
+
+                            b1.HasKey("ClienteId");
+
+                            b1.ToTable("Clientes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClienteId");
+                        });
+
+                    b.Navigation("Endereco");
+                });
+
             modelBuilder.Entity("LRC.Business.Entidades.ContaPagar", b =>
                 {
                     b.HasOne("LRC.Business.Entidades.Cliente", "Cliente")
-                        .WithOne("ContaPagar")
-                        .HasForeignKey("LRC.Business.Entidades.ContaPagar", "ClienteId")
+                        .WithMany("ContasPagar")
+                        .HasForeignKey("ClienteId")
                         .IsRequired();
 
                     b.HasOne("LRC.Business.Entidades.Fornecedor", "Fornecedor")
-                        .WithMany()
+                        .WithMany("ContasPagar")
                         .HasForeignKey("FornecedorId")
                         .IsRequired();
 
@@ -971,39 +943,18 @@ namespace LRC.Data.Migrations
             modelBuilder.Entity("LRC.Business.Entidades.ContaReceber", b =>
                 {
                     b.HasOne("LRC.Business.Entidades.Cliente", "Cliente")
-                        .WithOne("ContaReceber")
-                        .HasForeignKey("LRC.Business.Entidades.ContaReceber", "ClienteId")
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Endereco", b =>
-                {
-                    b.HasOne("LRC.Business.Entidades.Cliente", "Cliente")
-                        .WithMany("Enderecos")
+                        .WithMany("ContasReceber")
                         .HasForeignKey("ClienteId")
                         .IsRequired();
 
-                    b.HasOne("LRC.Business.Entidades.Colaborador", "Colaborador")
-                        .WithMany("Enderecos")
-                        .HasForeignKey("ColaboradorId")
+                    b.HasOne("LRC.Business.Entidades.Fornecedor", "Fornecedor")
+                        .WithMany("ContasReceber")
+                        .HasForeignKey("FornecedorId")
                         .IsRequired();
-
-                    b.HasOne("LRC.Business.Entidades.Entregador", "Entregador")
-                        .WithMany("Enderecos")
-                        .HasForeignKey("EntregadorId")
-                        .IsRequired();
-
-                    b.HasOne("LRC.Business.Entidades.Fornecedor", null)
-                        .WithMany("Enderecos")
-                        .HasForeignKey("FornecedorId");
 
                     b.Navigation("Cliente");
 
-                    b.Navigation("Colaborador");
-
-                    b.Navigation("Entregador");
+                    b.Navigation("Fornecedor");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.FluxoCaixa", b =>
@@ -1014,13 +965,46 @@ namespace LRC.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LRC.Business.Entidades.FormaPagamento", "FormaPagamento")
-                        .WithOne("FluxoCaixa")
-                        .HasForeignKey("LRC.Business.Entidades.FluxoCaixa", "FormaPagamentoId")
+                        .WithMany("FluxosCaixa")
+                        .HasForeignKey("FormaPagamentoId")
                         .IsRequired();
 
                     b.Navigation("Caixa");
 
                     b.Navigation("FormaPagamento");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Fornecedor", b =>
+                {
+                    b.OwnsOne("LRC.Business.Entidades.Componentes.Endereco", "Endereco", b1 =>
+                        {
+                            b1.Property<Guid>("FornecedorId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Bairro")
+                                .HasColumnType("varchar(100)");
+
+                            b1.Property<string>("Complemento")
+                                .HasColumnType("varchar(100)");
+
+                            b1.Property<string>("Logradouro")
+                                .HasColumnType("varchar(100)");
+
+                            b1.Property<string>("Numero")
+                                .HasColumnType("varchar(100)");
+
+                            b1.Property<string>("Referencia")
+                                .HasColumnType("varchar(100)");
+
+                            b1.HasKey("FornecedorId");
+
+                            b1.ToTable("Fornecedor");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FornecedorId");
+                        });
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Parcela", b =>
@@ -1036,8 +1020,13 @@ namespace LRC.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LRC.Business.Entidades.FormaPagamento", "FormaPagamento")
-                        .WithOne("Parcela")
-                        .HasForeignKey("LRC.Business.Entidades.Parcela", "FormaPagamentoId")
+                        .WithMany("Parcelas")
+                        .HasForeignKey("FormaPagamentoId")
+                        .IsRequired();
+
+                    b.HasOne("LRC.Business.Entidades.Pedido", "Pedido")
+                        .WithMany("Parcelas")
+                        .HasForeignKey("PedidoId")
                         .IsRequired();
 
                     b.Navigation("ContaPagar");
@@ -1045,13 +1034,49 @@ namespace LRC.Data.Migrations
                     b.Navigation("ContaReceber");
 
                     b.Navigation("FormaPagamento");
+
+                    b.Navigation("Pedido");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Pedido", b =>
+                {
+                    b.HasOne("LRC.Business.Entidades.Cliente", "Cliente")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("ClienteId")
+                        .IsRequired();
+
+                    b.HasOne("LRC.Business.Entidades.FormaPagamento", "FormaPagamento")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("FormaPagamentoId")
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("FormaPagamento");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.PedidoItem", b =>
+                {
+                    b.HasOne("LRC.Business.Entidades.Pedido", "Pedido")
+                        .WithMany("PedidoItems")
+                        .HasForeignKey("PedidoId")
+                        .IsRequired();
+
+                    b.HasOne("LRC.Business.Entidades.Produto", "Produto")
+                        .WithMany("PedidoItems")
+                        .HasForeignKey("ProdutoId")
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Produto", b =>
                 {
                     b.HasOne("LRC.Business.Entidades.Subgrupo", "Subgrupo")
-                        .WithOne("Produto")
-                        .HasForeignKey("LRC.Business.Entidades.Produto", "SubgrupoId")
+                        .WithMany("Produtos")
+                        .HasForeignKey("SubgrupoId")
                         .IsRequired();
 
                     b.Navigation("Subgrupo");
@@ -1060,8 +1085,8 @@ namespace LRC.Data.Migrations
             modelBuilder.Entity("LRC.Business.Entidades.Subgrupo", b =>
                 {
                     b.HasOne("LRC.Business.Entidades.Grupo", "Grupo")
-                        .WithOne("Subgrupo")
-                        .HasForeignKey("LRC.Business.Entidades.Subgrupo", "GrupoId")
+                        .WithMany("Subgrupos")
+                        .HasForeignKey("GrupoId")
                         .IsRequired();
 
                     b.Navigation("Grupo");
@@ -1125,16 +1150,11 @@ namespace LRC.Data.Migrations
 
             modelBuilder.Entity("LRC.Business.Entidades.Cliente", b =>
                 {
-                    b.Navigation("ContaPagar");
+                    b.Navigation("ContasPagar");
 
-                    b.Navigation("ContaReceber");
+                    b.Navigation("ContasReceber");
 
-                    b.Navigation("Enderecos");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Colaborador", b =>
-                {
-                    b.Navigation("Enderecos");
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.ContaPagar", b =>
@@ -1147,31 +1167,42 @@ namespace LRC.Data.Migrations
                     b.Navigation("Parcelas");
                 });
 
-            modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
-                {
-                    b.Navigation("Enderecos");
-                });
-
             modelBuilder.Entity("LRC.Business.Entidades.FormaPagamento", b =>
                 {
-                    b.Navigation("FluxoCaixa");
+                    b.Navigation("FluxosCaixa");
 
-                    b.Navigation("Parcela");
+                    b.Navigation("Parcelas");
+
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Fornecedor", b =>
                 {
-                    b.Navigation("Enderecos");
+                    b.Navigation("ContasPagar");
+
+                    b.Navigation("ContasReceber");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Grupo", b =>
                 {
-                    b.Navigation("Subgrupo");
+                    b.Navigation("Subgrupos");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Pedido", b =>
+                {
+                    b.Navigation("Parcelas");
+
+                    b.Navigation("PedidoItems");
+                });
+
+            modelBuilder.Entity("LRC.Business.Entidades.Produto", b =>
+                {
+                    b.Navigation("PedidoItems");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Subgrupo", b =>
                 {
-                    b.Navigation("Produto");
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

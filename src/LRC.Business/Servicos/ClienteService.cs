@@ -15,14 +15,11 @@ namespace LRC.Business.Servicos
     public class ClienteService : BaseService, IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
-        private readonly IEnderecoRepository _enderecoRepository;
 
         public ClienteService(IClienteRepository clienteRepository,
-        IEnderecoRepository enderecoRepository,
             INotificador notificador) : base(notificador)
         {
             _clienteRepository = clienteRepository;
-            _enderecoRepository = enderecoRepository;
         }
 
         public async Task Adicionar(Cliente entity)
@@ -50,11 +47,7 @@ namespace LRC.Business.Servicos
             await _clienteRepository.Atualizar(entity);
         }
 
-        public async Task AtualizarEndereco(Endereco endereco)
-        {
-            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
-            await _enderecoRepository.Atualizar(endereco);
-        }
+        
 
         public async Task<IEnumerable<Cliente>> Buscar(Expression<Func<Cliente, bool>> predicate)
         {
@@ -64,12 +57,6 @@ namespace LRC.Business.Servicos
         public void Dispose()
         {
             _clienteRepository?.Dispose();
-            _enderecoRepository?.Dispose();
-        }
-
-        public async Task<Cliente> ObterClienteEndereco(Guid id)
-        {
-            return await _clienteRepository.ObterClienteEndereco(id);
         }
 
         public async Task<Cliente> ObterPorId(Guid id)
@@ -84,19 +71,6 @@ namespace LRC.Business.Servicos
 
         public async Task Remover(Guid id)
         {
-            //if (_clienteRepository.ObterClienteEndereco(id).Result.Produtos.Any())
-            //{
-            //    Notificar("O Cliente possui produtos cadastrados!");
-            //    return;
-            //}
-
-            var endereco = await _enderecoRepository.ObterEnderecoPorCliente(id);
-
-            if (endereco != null)
-            {
-                await _enderecoRepository.Remover(endereco.Id);
-            }
-
             await _clienteRepository.Remover(id);
         }
     }

@@ -9,7 +9,7 @@ namespace LRC.Business.Interfaces.Servicos
 {
     public interface IClienteService : IService<Cliente>
     {
-        Task<Cliente> ObterClienteEndereco(Guid id);
-        Task AtualizarEndereco(Endereco endereco);
+        //Task<Cliente> ObterClienteEndereco(Guid id);
+        //Task AtualizarEndereco(Endereco endereco);
     }
 }

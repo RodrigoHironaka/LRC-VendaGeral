@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using LRC.Business.Entidades;
+using LRC.Business.Entidades.Componentes;
 using LRC.Business.Interfaces;
 using LRC.Business.Notificacoes;
 

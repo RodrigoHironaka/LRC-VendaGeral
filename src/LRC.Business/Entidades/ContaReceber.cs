@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,10 @@ namespace LRC.Business.Entidades
 
         public Guid ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
-        
-        public IList<Parcela>? Parcelas { get; set; } = new List<Parcela>();
+
+        public Guid FornecedorId { get; set; }
+        public Fornecedor? Fornecedor { get; set; }
+
+        public ICollection<Parcela> Parcelas { get; set; } = new List<Parcela>();
     }
 }

@@ -58,6 +58,40 @@ function Salvar(formId, url) {
     });
 }
 
+function SalvarNaoModal(formId, url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#" + formId).serialize(),
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: 'Operação realizada com sucesso.',
+                    timer: 5000
+                }).then(function () {
+                    window.location.href = window.location.href + '?nocache=' + new Date().getTime();
+                });;
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.errors,
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ocorreu um erro ao enviar o formulário.',
+            });
+        }
+    });
+}
+
 //-------------------------------------------------------------------------------------
 
 //Excluir------------------------------------------------------------------------------

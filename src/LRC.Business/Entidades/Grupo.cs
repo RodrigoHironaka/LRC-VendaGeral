@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,8 +12,8 @@ namespace LRC.Business.Entidades
     public class Grupo : Entidade
     {
         public string? Nome { get; set; }
-        public Situacao Situacao { get; set; }
+        public Situacao Situacao { get; set; } = Situacao.Ativo;
 
-        public Subgrupo? Subgrupo { get; set; }
+        public ICollection<Subgrupo> Subgrupos { get; set; } = new List<Subgrupo>();
     }
 }

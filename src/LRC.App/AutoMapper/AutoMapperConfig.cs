@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LRC.App.ViewModels;
 using LRC.Business.Entidades;
+using LRC.Business.Entidades.Componentes;
 
 namespace LRC.App.AutoMapper
 {
@@ -10,6 +11,9 @@ namespace LRC.App.AutoMapper
         {
             CreateMap<Grupo, GrupoVM>().ReverseMap();
             CreateMap<Subgrupo, SubGrupoVM>().ReverseMap();
+            CreateMap<Produto, ProdutoVM>().ReverseMap();
+            CreateMap<Cliente, ClienteVM>().ReverseMap();
+            CreateMap<Endereco, EnderecoVM>().ReverseMap();
         }
     }
 }

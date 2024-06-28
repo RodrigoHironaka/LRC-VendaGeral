@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,14 @@ namespace LRC.Business.Entidades
     {
         public string? Nome { get; set; }
         public string? Descricao { get; set; }
-        public string? Valor { get; set; }
-        public Int32? Quantidade { get; set; }
-        public Situacao? Situacao { get; set; }
+        public decimal Valor { get; set; }
+        public decimal Quantidade { get; set; }
+        public UnidadeMedida UnidadeMedida { get; set; } = UnidadeMedida.UN;
+        public Situacao Situacao { get; set; } = Situacao.Ativo;
 
         public Guid SubgrupoId { get; set; }
         public Subgrupo? Subgrupo { get; set; }
+
+        public ICollection<PedidoItem> PedidoItems { get; set; } = new List<PedidoItem>();
     }
 }

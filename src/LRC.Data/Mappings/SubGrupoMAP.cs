@@ -13,8 +13,9 @@ namespace LRC.Data.Mappings
             builder.Property(x => x.DataAlteracao);
             builder.Property(x => x.UsuarioCadastroId);
             builder.Property(x => x.UsuarioAlteracaoId);
+            builder.Property(x => x.Situacao).HasConversion<Int32>();
             builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(200)");
-            builder.HasOne(x => x.Grupo).WithOne(x => x.Subgrupo);
+            builder.HasOne(x => x.Grupo).WithMany(x => x.Subgrupos).HasForeignKey(x => x.GrupoId);
             builder.ToTable("SubGrupos");
         }
     }

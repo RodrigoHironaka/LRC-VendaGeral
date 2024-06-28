@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LRC.App.ViewModels.ClienteVM>
+
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+
+<p>
+    <a asp-action="Editar" asp-route-id="@Guid.Empty" class="w-100 btn btn-success"><i class="badge-info bi-plus-lg"></i> Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RazaoSocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Celular)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Celular2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Situacao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RazaoSocial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Celular)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Celular2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Situacao)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger" asp-action="Deletar" asp-route-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

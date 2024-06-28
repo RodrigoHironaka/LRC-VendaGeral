@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LRC.Business.Entidades
+namespace LRC.Business.Entidades.Componentes
 {
     public abstract class Entidade
     {

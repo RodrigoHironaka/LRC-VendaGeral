@@ -10,6 +10,7 @@ namespace LRC.App.Data
             : base(options)
         {
         }
-        public DbSet<LRC.App.ViewModels.SubGrupoVM> SubGrupoVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.ClienteVM> ClienteVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.EnderecoVM> EnderecoVM { get; set; } = default!;
     }
 }

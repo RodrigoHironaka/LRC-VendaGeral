@@ -7,10 +7,6 @@ namespace LRC.App.ViewModels
 {
     public class GrupoVM
     {
-        public GrupoVM()
-        {
-            Situacao = Business.Entidades.Enums.Situacao.Ativo;
-        }
         [Key]
         public Guid Id { get; set; }
 
@@ -20,7 +16,7 @@ namespace LRC.App.ViewModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Situação")]
-        public Situacao? Situacao { get; set; }
+        public Situacao Situacao { get; set; } = Business.Entidades.Enums.Situacao.Ativo;
 
         [ScaffoldColumn(false)]
         public DateTime DataCadastro { get; set; }

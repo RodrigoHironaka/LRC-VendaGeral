@@ -1,4 +1,4 @@
-﻿using LRC.Business.Entidades;
+﻿using LRC.Business.Entidades.Componentes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 
 namespace LRC.Business.Entidades
 {
@@ -7,8 +8,10 @@ namespace LRC.Business.Entidades
         public string? Nome { get; set; }
         public Int32 QtdParcelamento { get; set; } 
         public Int32 PeridoParcelamento { get; set; }
-        public Situacao Situacao { get; set; }
-        public FluxoCaixa? FluxoCaixa { get; set; }
-        public Parcela? Parcela { get; set; }
+        public Situacao Situacao { get; set; } = Situacao.Ativo;
+
+        public ICollection<FluxoCaixa> FluxosCaixa { get; set; } = new List<FluxoCaixa>();
+        public ICollection<Parcela> Parcelas { get; set; } = new List<Parcela>();
+        public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
     }
 }

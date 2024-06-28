@@ -5,7 +5,7 @@ namespace LRC.App.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly INotificador _notificador;
+        public readonly INotificador _notificador;
 
         protected BaseController(INotificador notificador)
         {

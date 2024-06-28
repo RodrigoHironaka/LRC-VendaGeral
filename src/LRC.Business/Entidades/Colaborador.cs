@@ -1,4 +1,5 @@
-﻿using LRC.Business.Entidades.Enums;
+﻿using LRC.Business.Entidades.Componentes;
+using LRC.Business.Entidades.Enums;
 
 namespace LRC.Business.Entidades
 {
@@ -6,6 +7,6 @@ namespace LRC.Business.Entidades
     {
         public virtual DateTime? Admissao { get; set; }
         public virtual DateTime? Demissao { get; set; }
-        public Situacao Situacao { get; set; }
+        public Situacao Situacao { get; set; } = Situacao.Ativo;
     }
 }

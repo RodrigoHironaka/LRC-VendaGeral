@@ -1,4 +1,6 @@
-﻿namespace LRC.Business.Entidades
+﻿using LRC.Business.Entidades.Componentes;
+
+namespace LRC.Business.Entidades
 {
     public class LogAlteracao : Entidade
     {

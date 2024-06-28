@@ -1,11 +1,6 @@
 ﻿using LRC.Business.Entidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LRC.Data.Mappings
 {
@@ -19,6 +14,8 @@ namespace LRC.Data.Mappings
             builder.Property(x => x.UsuarioCadastroId);
             builder.Property(x => x.UsuarioAlteracaoId);
             builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(200)");
+            builder.Property(x => x.Situacao).HasConversion<Int32>();
+            builder.HasMany(x => x.Subgrupos).WithOne(x => x.Grupo).HasForeignKey(x => x.GrupoId);
             builder.ToTable("Grupos");
         }
     }

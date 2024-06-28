@@ -1,11 +1,6 @@
 ﻿using LRC.Business.Entidades;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LRC.Data.Context
 {
@@ -21,17 +16,17 @@ namespace LRC.Data.Context
         public DbSet<LogAlteracao> LogsAlteracao { get; set; }
         public DbSet<Subgrupo> SubGrupos { get; set; }
         public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Endereco> Enderecos { get; set; }
+        //public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Colaborador> Colaboradores { get; set; }
-        public DbSet<Entregador> Entregadores { get; set; }
-        public DbSet<Fornecedor> Fornecedores { get; set; }
-        public DbSet<Caixa> Caixas { get; set; }
-        public DbSet<FluxoCaixa> FluxosCaixa { get; set; }
-        public DbSet<FormaPagamento> FormasPagamento { get; set; }
-        public DbSet<ContaReceber> ContasReceber { get; set; }
-        public DbSet<ContaPagar> ContasPagar { get; set; }
-        public DbSet<Parcela> Parcelas { get; set; }
+        //public DbSet<Colaborador> Colaboradores { get; set; }
+        //public DbSet<Entregador> Entregadores { get; set; }
+        //public DbSet<Fornecedor> Fornecedores { get; set; }
+        //public DbSet<Caixa> Caixas { get; set; }
+        //public DbSet<FluxoCaixa> FluxosCaixa { get; set; }
+        //public DbSet<FormaPagamento> FormasPagamento { get; set; }
+        //public DbSet<ContaReceber> ContasReceber { get; set; }
+        //public DbSet<ContaPagar> ContasPagar { get; set; }
+        //public DbSet<Parcela> Parcelas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,25 +49,6 @@ namespace LRC.Data.Context
                 entity.Ignore(e => e.UsuarioAlteracaoId);
             });
 
-            //Ignora isUnique das chaves estrangeiras
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                foreach (var foreignKey in entityType.GetForeignKeys())
-                {
-                    var principalTable = foreignKey.PrincipalEntityType.GetTableName();
-                    var principalColumns = foreignKey.PrincipalKey.Properties;
-
-                    foreach (var property in foreignKey.Properties)
-                    {
-                        var index = entityType.FindIndex(property);
-                        if (index == null)
-                            index = entityType.AddIndex(property);
-                        
-                        index.IsUnique = false;
-                    }
-                }
-            }
-
             base.OnModelCreating(modelBuilder);
         }
 
@@ -93,5 +69,6 @@ namespace LRC.Data.Context
 
             return base.SaveChangesAsync(cancellationToken);
         }
+
     }
 }

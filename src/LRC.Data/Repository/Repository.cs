@@ -1,4 +1,4 @@
-﻿using LRC.Business.Entidades;
+﻿using LRC.Business.Entidades.Componentes;
 using LRC.Business.Interfaces.Repositorios;
 using LRC.Data.Context;
 using Microsoft.EntityFrameworkCore;
