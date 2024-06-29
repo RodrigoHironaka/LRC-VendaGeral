@@ -1,7 +1,7 @@
-﻿@model IEnumerable<LRC.App.ViewModels.ClienteVM>
+﻿@model IEnumerable<LRC.App.ViewModels.EntregadorVM>
 
 @{
-    ViewData["Title"] = "Lista de Clientes";
+    ViewData["Title"] = "Lista de Entregadores";
 }
 
 <h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
@@ -15,18 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.RazaoSocial)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Celular)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Celular2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Situacao)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -36,18 +24,6 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.RazaoSocial)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Celular)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Celular2)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Telefone)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Situacao)
                 </td>
                 <td>
                     <a class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
@@ -61,7 +37,7 @@
 {
     <script>
         function chamarExcluir(id) {
-            var url = 'excluir-cliente/' + id;
+            var url = 'excluir-entregador/' + id;
             Excluir(id, url)
         }
 

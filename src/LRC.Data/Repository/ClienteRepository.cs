@@ -7,10 +7,5 @@ namespace LRC.Data.Repository
     public class ClienteRepository : Repository<Cliente>, IClienteRepository
     {
         public ClienteRepository(MeuDbContext db) : base(db) { }
-
-        //public Task<Cliente> ObterClienteEndereco(Guid id)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

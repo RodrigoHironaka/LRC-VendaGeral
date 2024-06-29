@@ -20,6 +20,8 @@ namespace LRC.App.Configurations
             services.AddScoped<ILogAlteracaoRepository, LogAlteracaoRepository>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+            services.AddScoped<IEntregadorRepository, EntregadorRepository>();
 
             services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
 
@@ -29,6 +31,8 @@ namespace LRC.App.Configurations
             services.AddScoped<ILogAlteracaoService, LogAlteracaoService>();
             services.AddScoped<IProdutoService, ProdutoService>();
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IColaboradorService, ColaboradorService>();
+            services.AddScoped<IEntregadorService, EntregadorService>();
             return services;
         }
     }

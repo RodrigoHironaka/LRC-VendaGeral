@@ -68,7 +68,7 @@ namespace LRC.App.Controllers
             if (Id != grupoVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList());
+                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToList());
                 return Json(new { success = false, errors, isModelState = true });
             }
 
@@ -89,7 +89,7 @@ namespace LRC.App.Controllers
 
                         await _logAlteracaoService.CompararAlteracoes(grupoClone, grupo, Guid.Parse(user.Id), $"Grupo[{grupo.Id}]");
                         await _grupoService.Atualizar(grupo);
-                        await transaction.CommitAsync();
+                       
                     }
                     else
                     {
@@ -106,6 +106,7 @@ namespace LRC.App.Controllers
                         errors.Add(ObterNotificacoes.ExecutarValidacao(new GrupoValidation(), grupo));
                         return Json(new { success = false, errors });
                     }
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {

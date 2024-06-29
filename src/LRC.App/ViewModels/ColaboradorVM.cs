@@ -1,11 +1,11 @@
 ﻿using LRC.Business.Entidades.Enums;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace LRC.App.ViewModels
 {
-    public class ClienteVM : PessoaVM
+    public class ColaboradorVM : PessoaVM
     {
         public string? Logradouro { get; set; }
 
@@ -18,7 +18,8 @@ namespace LRC.App.ViewModels
 
         public string? Referencia { get; set; }
 
-        public string? Responsaveis { get; set; }
+        public DateTime? Admissao { get; set; }
+        public DateTime? Demissao { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Situação")]

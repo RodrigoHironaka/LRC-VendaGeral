@@ -76,7 +76,7 @@ namespace LRC.App.Controllers
             if (Id != produtoVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList());
+                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToList());
                 return Json(new { success = false, errors, isModelState = true });
             }
 

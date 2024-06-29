@@ -18,8 +18,8 @@ namespace LRC.Data.Context
         public DbSet<Produto> Produtos { get; set; }
         //public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
-        //public DbSet<Colaborador> Colaboradores { get; set; }
-        //public DbSet<Entregador> Entregadores { get; set; }
+        public DbSet<Colaborador> Colaboradores { get; set; }
+        public DbSet<Entregador> Entregadores { get; set; }
         //public DbSet<Fornecedor> Fornecedores { get; set; }
         //public DbSet<Caixa> Caixas { get; set; }
         //public DbSet<FluxoCaixa> FluxosCaixa { get; set; }

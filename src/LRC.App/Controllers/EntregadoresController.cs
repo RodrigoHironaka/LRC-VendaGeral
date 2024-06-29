@@ -9,65 +9,60 @@ using LRC.App.ViewModels;
 using LRC.Business.Servicos;
 using LRC.Business.Entidades.Validacoes;
 using LRC.Business.Entidades;
-using Microsoft.AspNetCore.Authorization;
-using LRC.Business.Notificacoes;
-using Newtonsoft.Json;
 
 namespace LRC.App.Controllers
 {
-    [Authorize]
-    public class ClientesController : BaseController
+    public class EntregadoresController : BaseController
     {
-        private readonly IClienteService _clienteService;
+        private readonly IEntregadorService _entregadorService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly MeuDbContext _context;
         private readonly ILogAlteracaoService _logAlteracaoService;
 
-        public ClientesController(IMapper mapper,
-                                  IClienteService clienteService,
+        public EntregadoresController(IMapper mapper,
+                                  IEntregadorService entregadorService,
                                   UserManager<IdentityUser> userManager,
                                   MeuDbContext context,
                                   ILogAlteracaoService logAlteracaoService,
                                   INotificador notificador) : base(notificador)
         {
             _mapper = mapper;
-            _clienteService = clienteService;
+            _entregadorService = entregadorService;
             _userManager = userManager;
             _context = context;
             _logAlteracaoService = logAlteracaoService;
         }
 
-
-        [Route("lista-de-clientes")]
+        [Route("lista-de-entregadores")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ClienteVM>>(await _clienteService.ObterTodos()));
+            return View(_mapper.Map<IEnumerable<EntregadorVM>>(await _entregadorService.ObterTodos()));
         }
 
-        [Route("editar-cliente/{id}")]
+        [Route("editar-entregador/{id}")]
         public async Task<IActionResult> Editar(Guid Id)
         {
-            var clienteVM = new ClienteVM();
+            var entregadorVM = new EntregadorVM();
             if (Id != Guid.Empty)
             {
-                var cliente = await _clienteService.ObterPorId(Id);
-                if (cliente == null) return NotFound();
+                var entregador = await _entregadorService.ObterPorId(Id);
+                if (entregador == null) return NotFound();
 
-                clienteVM = _mapper.Map<ClienteVM>(cliente);
-                clienteVM.UsuarioCadastro = await _userManager.FindByIdAsync(clienteVM.UsuarioCadastroId.ToString());
-                clienteVM.UsuarioAlteracao = await _userManager.FindByIdAsync(clienteVM.UsuarioAlteracaoId.ToString());
+                entregadorVM = _mapper.Map<EntregadorVM>(entregador);
+                entregadorVM.UsuarioCadastro = await _userManager.FindByIdAsync(entregadorVM.UsuarioCadastroId.ToString());
+                entregadorVM.UsuarioAlteracao = await _userManager.FindByIdAsync(entregadorVM.UsuarioAlteracaoId.ToString());
             }
 
-            return View(clienteVM);
+            return View(entregadorVM);
         }
 
-        [Route("editar-cliente/{id:guid}")]
+        [Route("editar-entregador/{id:guid}")]
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Editar(Guid Id, ClienteVM clienteVM)
+        public async Task<IActionResult> Editar(Guid Id, EntregadorVM entregadorVM)
         {
-            if (Id != clienteVM.Id) return NotFound();
+            if (Id != entregadorVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -75,7 +70,7 @@ namespace LRC.App.Controllers
             }
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
-            Cliente cliente;
+            Entregador entregador;
 
             if (user != null)
             {
@@ -84,18 +79,18 @@ namespace LRC.App.Controllers
                 {
                     if (Id != Guid.Empty)
                     {
-                        var cLienteClone = await _clienteService.ObterPorId(Id);
-                        clienteVM.DataAlteracao = DateTime.Now;
-                        cliente = _mapper.Map<Cliente>(clienteVM);
-                        cliente.UsuarioAlteracaoId = Guid.Parse(user.Id);
-                        await _logAlteracaoService.CompararAlteracoes(cLienteClone, cliente, Guid.Parse(user.Id), $"Cliente[{cliente.Id}]");
-                        await _clienteService.Atualizar(cliente);
+                        var entregadorClone = await _entregadorService.ObterPorId(Id);
+                        entregadorVM.DataAlteracao = DateTime.Now;
+                        entregador = _mapper.Map<Entregador>(entregadorVM);
+                        entregador.UsuarioAlteracaoId = Guid.Parse(user.Id);
+                        await _logAlteracaoService.CompararAlteracoes(entregadorClone, entregador, Guid.Parse(user.Id), $"Entregador[{entregador.Id}]");
+                        await _entregadorService.Atualizar(entregador);
                     }
                     else
                     {
-                        cliente = _mapper.Map<Cliente>(clienteVM);
-                        cliente.UsuarioCadastroId = Guid.Parse(user.Id);
-                        await _clienteService.Adicionar(cliente);
+                        entregador = _mapper.Map<Entregador>(entregadorVM);
+                        entregador.UsuarioCadastroId = Guid.Parse(user.Id);
+                        await _entregadorService.Adicionar(entregador);
                     }
 
                     if (!OperacaoValida())
@@ -103,12 +98,11 @@ namespace LRC.App.Controllers
                         await transaction.RollbackAsync();
                         List<string> errors = new List<string>();
                         errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
-                        errors.Add(ObterNotificacoes.ExecutarValidacao(new ClienteValidation(), cliente));
+                        errors.Add(ObterNotificacoes.ExecutarValidacao(new EntregadorValidation(), entregador));
                         return Json(new { success = false, errors });
                     }
                     await transaction.CommitAsync();
                     return Json(new { success = true });
-                    //return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
@@ -116,16 +110,16 @@ namespace LRC.App.Controllers
                     return Json(new { success = false, errors = ex.Message });
                 }
             }
-            return View(clienteVM);
+            return View(entregadorVM);
         }
 
         [HttpPost]
-        [Route("excluir-cliente/{id:guid}")]
+        [Route("excluir-entregador/{id:guid}")]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var cliente = await _clienteService.ObterPorId(id);
-            if (cliente == null) return NotFound();
+            var entregador = await _entregadorService.ObterPorId(id);
+            if (entregador == null) return NotFound();
             IdentityUser? user = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
@@ -133,8 +127,8 @@ namespace LRC.App.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {cliente.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Cliente[{cliente.Id}]");
-                await _clienteService.Remover(id);
+                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {entregador.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Entregador[{entregador.Id}]");
+                await _entregadorService.Remover(id);
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
@@ -146,7 +140,7 @@ namespace LRC.App.Controllers
             if (!OperacaoValida())
             {
                 await transaction.RollbackAsync();
-                var errors = ObterNotificacoes.ExecutarValidacao(new ClienteValidation(), cliente);
+                var errors = ObterNotificacoes.ExecutarValidacao(new EntregadorValidation(), entregador);
                 return Json(new { success = false, errors });
             }
 

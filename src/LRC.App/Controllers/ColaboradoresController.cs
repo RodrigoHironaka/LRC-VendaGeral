@@ -1,73 +1,67 @@
 ﻿using AutoMapper;
+using LRC.App.ViewModels;
+using LRC.Business.Entidades.Validacoes;
+using LRC.Business.Entidades;
 using LRC.Business.Interfaces.Servicos;
 using LRC.Business.Interfaces;
 using LRC.Data.Context;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using LRC.App.ViewModels;
-using LRC.Business.Servicos;
-using LRC.Business.Entidades.Validacoes;
-using LRC.Business.Entidades;
-using Microsoft.AspNetCore.Authorization;
-using LRC.Business.Notificacoes;
-using Newtonsoft.Json;
 
 namespace LRC.App.Controllers
 {
-    [Authorize]
-    public class ClientesController : BaseController
+    public class ColaboradoresController : BaseController
     {
-        private readonly IClienteService _clienteService;
+        private readonly IColaboradorService _colaboradorService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly MeuDbContext _context;
         private readonly ILogAlteracaoService _logAlteracaoService;
 
-        public ClientesController(IMapper mapper,
-                                  IClienteService clienteService,
+        public ColaboradoresController(IMapper mapper,
+                                  IColaboradorService colaboradorService,
                                   UserManager<IdentityUser> userManager,
                                   MeuDbContext context,
                                   ILogAlteracaoService logAlteracaoService,
                                   INotificador notificador) : base(notificador)
         {
             _mapper = mapper;
-            _clienteService = clienteService;
+            _colaboradorService = colaboradorService;
             _userManager = userManager;
             _context = context;
             _logAlteracaoService = logAlteracaoService;
         }
 
 
-        [Route("lista-de-clientes")]
+        [Route("lista-de-colaboradores")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ClienteVM>>(await _clienteService.ObterTodos()));
+            return View(_mapper.Map<IEnumerable<ColaboradorVM>>(await _colaboradorService.ObterTodos()));
         }
 
-        [Route("editar-cliente/{id}")]
+        [Route("editar-colaborador/{id}")]
         public async Task<IActionResult> Editar(Guid Id)
         {
-            var clienteVM = new ClienteVM();
+            var colaboradorVM = new ColaboradorVM();
             if (Id != Guid.Empty)
             {
-                var cliente = await _clienteService.ObterPorId(Id);
-                if (cliente == null) return NotFound();
+                var colaborador = await _colaboradorService.ObterPorId(Id);
+                if (colaborador == null) return NotFound();
 
-                clienteVM = _mapper.Map<ClienteVM>(cliente);
-                clienteVM.UsuarioCadastro = await _userManager.FindByIdAsync(clienteVM.UsuarioCadastroId.ToString());
-                clienteVM.UsuarioAlteracao = await _userManager.FindByIdAsync(clienteVM.UsuarioAlteracaoId.ToString());
+                colaboradorVM = _mapper.Map<ColaboradorVM>(colaborador);
+                colaboradorVM.UsuarioCadastro = await _userManager.FindByIdAsync(colaboradorVM.UsuarioCadastroId.ToString());
+                colaboradorVM.UsuarioAlteracao = await _userManager.FindByIdAsync(colaboradorVM.UsuarioAlteracaoId.ToString());
             }
 
-            return View(clienteVM);
+            return View(colaboradorVM);
         }
 
-        [Route("editar-cliente/{id:guid}")]
+        [Route("editar-colaborador/{id:guid}")]
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Editar(Guid Id, ClienteVM clienteVM)
+        public async Task<IActionResult> Editar(Guid Id, ColaboradorVM colaboradorVM)
         {
-            if (Id != clienteVM.Id) return NotFound();
+            if (Id != colaboradorVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -75,7 +69,7 @@ namespace LRC.App.Controllers
             }
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
-            Cliente cliente;
+            Colaborador colaborador;
 
             if (user != null)
             {
@@ -84,18 +78,18 @@ namespace LRC.App.Controllers
                 {
                     if (Id != Guid.Empty)
                     {
-                        var cLienteClone = await _clienteService.ObterPorId(Id);
-                        clienteVM.DataAlteracao = DateTime.Now;
-                        cliente = _mapper.Map<Cliente>(clienteVM);
-                        cliente.UsuarioAlteracaoId = Guid.Parse(user.Id);
-                        await _logAlteracaoService.CompararAlteracoes(cLienteClone, cliente, Guid.Parse(user.Id), $"Cliente[{cliente.Id}]");
-                        await _clienteService.Atualizar(cliente);
+                        var colaboradorClone = await _colaboradorService.ObterPorId(Id);
+                        colaboradorVM.DataAlteracao = DateTime.Now;
+                        colaborador = _mapper.Map<Colaborador>(colaboradorVM);
+                        colaborador.UsuarioAlteracaoId = Guid.Parse(user.Id);
+                        await _logAlteracaoService.CompararAlteracoes(colaboradorClone, colaborador, Guid.Parse(user.Id), $"Colaborador[{colaborador.Id}]");
+                        await _colaboradorService.Atualizar(colaborador);
                     }
                     else
                     {
-                        cliente = _mapper.Map<Cliente>(clienteVM);
-                        cliente.UsuarioCadastroId = Guid.Parse(user.Id);
-                        await _clienteService.Adicionar(cliente);
+                        colaborador = _mapper.Map<Colaborador>(colaboradorVM);
+                        colaborador.UsuarioCadastroId = Guid.Parse(user.Id);
+                        await _colaboradorService.Adicionar(colaborador);
                     }
 
                     if (!OperacaoValida())
@@ -103,12 +97,11 @@ namespace LRC.App.Controllers
                         await transaction.RollbackAsync();
                         List<string> errors = new List<string>();
                         errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
-                        errors.Add(ObterNotificacoes.ExecutarValidacao(new ClienteValidation(), cliente));
+                        errors.Add(ObterNotificacoes.ExecutarValidacao(new ColaboradorValidation(), colaborador));
                         return Json(new { success = false, errors });
                     }
                     await transaction.CommitAsync();
                     return Json(new { success = true });
-                    //return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
@@ -116,16 +109,16 @@ namespace LRC.App.Controllers
                     return Json(new { success = false, errors = ex.Message });
                 }
             }
-            return View(clienteVM);
+            return View(colaboradorVM);
         }
 
         [HttpPost]
-        [Route("excluir-cliente/{id:guid}")]
+        [Route("excluir-colaborador/{id:guid}")]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var cliente = await _clienteService.ObterPorId(id);
-            if (cliente == null) return NotFound();
+            var colaborador = await _colaboradorService.ObterPorId(id);
+            if (colaborador == null) return NotFound();
             IdentityUser? user = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
@@ -133,8 +126,8 @@ namespace LRC.App.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {cliente.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Cliente[{cliente.Id}]");
-                await _clienteService.Remover(id);
+                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {colaborador.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Colaborador[{colaborador.Id}]");
+                await _colaboradorService.Remover(id);
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
@@ -146,7 +139,7 @@ namespace LRC.App.Controllers
             if (!OperacaoValida())
             {
                 await transaction.RollbackAsync();
-                var errors = ObterNotificacoes.ExecutarValidacao(new ClienteValidation(), cliente);
+                var errors = ObterNotificacoes.ExecutarValidacao(new ColaboradorValidation(), colaborador);
                 return Json(new { success = false, errors });
             }
 
@@ -154,3 +147,4 @@ namespace LRC.App.Controllers
         }
     }
 }
+

@@ -4,6 +4,7 @@ using LRC.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRC.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    partial class MeuDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240629085535_Inicio3")]
+    partial class Inicio3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,69 +274,6 @@ namespace LRC.Data.Migrations
                     b.HasIndex("FornecedorId");
 
                     b.ToTable("ContaReceber");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Celular")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Celular2")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Documento")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Documento2")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("Nascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NomeFantasia")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Placa")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("RazaoSocial")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("Situacao")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telefone")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("TipoPessoa")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipoVeiculo")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioCadastroId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Entregadores", (string)null);
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.FluxoCaixa", b =>
@@ -1124,49 +1064,6 @@ namespace LRC.Data.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Fornecedor");
-                });
-
-            modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
-                {
-                    b.OwnsOne("LRC.Business.Entidades.Componentes.Endereco", "Endereco", b1 =>
-                        {
-                            b1.Property<Guid>("EntregadorId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Bairro")
-                                .HasMaxLength(70)
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Bairro");
-
-                            b1.Property<string>("Complemento")
-                                .HasMaxLength(150)
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Complemento");
-
-                            b1.Property<string>("Logradouro")
-                                .HasMaxLength(100)
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Logradouro");
-
-                            b1.Property<string>("Numero")
-                                .HasMaxLength(30)
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Numero");
-
-                            b1.Property<string>("Referencia")
-                                .HasMaxLength(150)
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Referencia");
-
-                            b1.HasKey("EntregadorId");
-
-                            b1.ToTable("Entregadores");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EntregadorId");
-                        });
-
-                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.FluxoCaixa", b =>

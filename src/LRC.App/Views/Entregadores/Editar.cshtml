@@ -1,5 +1,5 @@
 ﻿@using LRC.Business.Entidades.Enums
-@model LRC.App.ViewModels.ClienteVM
+@model LRC.App.ViewModels.EntregadorVM
 
 @{
     ViewData["Title"] = Model.Id == Guid.Empty ? "NOVO REGISTRO" : "EDITAR REGISTRO";
@@ -62,17 +62,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="form-group">
                     <label asp-for="Telefone" class="control-label"></label>
                     <input asp-for="Telefone" class="form-control" />
                     <span asp-validation-for="Telefone" class="text-danger"></span>
                 </div>
-                <div class="col-md-4">
+                <div class="form-group">
                     <label asp-for="Celular" class="control-label"></label>
                     <input asp-for="Celular" class="form-control" />
                     <span asp-validation-for="Celular" class="text-danger"></span>
                 </div>
-                <div class="col-md-4">
+                <div class="form-group">
                     <label asp-for="Celular2" class="control-label"></label>
                     <input asp-for="Celular2" class="form-control" />
                     <span asp-validation-for="Celular2" class="text-danger"></span>
@@ -106,10 +106,15 @@
                     <input asp-for="Referencia" class="form-control" />
                     <span asp-validation-for="Referencia" class="text-danger"></span>
                 </div>
-                <div class="col-md-4">
-                    <label asp-for="Responsaveis" class="control-label"></label>
-                    <input asp-for="Responsaveis" class="form-control" />
-                    <span asp-validation-for="Responsaveis" class="text-danger"></span>
+                <div class="col-md-2">
+                    <label asp-for="TipoVeiculo" class="control-label"></label>
+                    <select asp-for="TipoVeiculo" class="form-select" asp-items="Html.GetEnumSelectList<TipoVeiculo>()"></select>
+                    <span asp-validation-for="TipoVeiculo" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="Placa" class="control-label"></label>
+                    <input asp-for="Placa" class="form-control" />
+                    <span asp-validation-for="Placa" class="text-danger"></span>
                 </div>
             </div>
             <div class="row">
@@ -128,22 +133,20 @@
                     </div>
                 }
             </div>
-
             <div class="form-group">
                 <br />
                 <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
-                 @* <input type="submit" value="Salvar Registro" class="btn btn-primary" /> *@
                 <button type="button" onclick="chamarSalvar()" class="btn btn-success">Salvar Registro</button>
             </div>
         </form>
     </div>
-
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
     <script>
         function chamarSalvar() {
             var id = $("#Id").val();

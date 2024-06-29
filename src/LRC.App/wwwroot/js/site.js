@@ -20,7 +20,7 @@ function TipoClick() {
 //--------------------------------------------------------------------------------------
 
 //Salvar--------------------------------------------------------------------------------
-function Salvar(formId, url) {
+function SalvarQuandoModal(formId, url) {
     $.ajax({
         type: "POST",
         url: url,
@@ -58,7 +58,7 @@ function Salvar(formId, url) {
     });
 }
 
-function SalvarNaoModal(formId, url) {
+function SalvarQuandoNaoModal(formId, url) {
     $.ajax({
         type: "POST",
         url: url,
@@ -71,8 +71,8 @@ function SalvarNaoModal(formId, url) {
                     text: 'Operação realizada com sucesso.',
                     timer: 5000
                 }).then(function () {
-                    window.location.href = window.location.href + '?nocache=' + new Date().getTime();
-                });;
+                    window.history.back();
+                });
             }
             else {
                 Swal.fire({
@@ -91,7 +91,6 @@ function SalvarNaoModal(formId, url) {
         }
     });
 }
-
 //-------------------------------------------------------------------------------------
 
 //Excluir------------------------------------------------------------------------------

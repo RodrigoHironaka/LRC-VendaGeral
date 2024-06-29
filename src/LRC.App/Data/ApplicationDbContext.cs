@@ -12,5 +12,7 @@ namespace LRC.App.Data
         }
         public DbSet<LRC.App.ViewModels.ClienteVM> ClienteVM { get; set; } = default!;
         public DbSet<LRC.App.ViewModels.EnderecoVM> EnderecoVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.ColaboradorVM> ColaboradorVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.EntregadorVM> EntregadorVM { get; set; } = default!;
     }
 }
