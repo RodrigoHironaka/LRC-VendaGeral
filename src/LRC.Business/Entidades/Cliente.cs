@@ -10,7 +10,6 @@ namespace LRC.Business.Entidades
 
 
         public ICollection<ContaReceber> ContasReceber { get; set; } = new List<ContaReceber>();
-        public ICollection<ContaPagar> ContasPagar { get; set; } = new List<ContaPagar>();
         public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
     }
 }

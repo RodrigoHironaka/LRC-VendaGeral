@@ -12,7 +12,6 @@ namespace LRC.Business.Entidades
     {
         public Situacao Situacao { get; set; } = Situacao.Ativo;
 
-        public ICollection<ContaReceber> ContasReceber { get; set; } = new List<ContaReceber>();
         public ICollection<ContaPagar> ContasPagar { get; set; } = new List<ContaPagar>();
     }
 }

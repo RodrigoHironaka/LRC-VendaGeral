@@ -12,15 +12,15 @@ namespace LRC.Business.Entidades
     {
         public string? Descricao { get; set; }
         public DateTime? DataEmissao { get; set; }
+        public DateTime? DataFechamento { get; set; }
+        public DateTime DataVencimento { get; set; }
         public string? NumeroDocumento { get; set; }
         public string? Observacao { get; set; }
+        public decimal Valor { get; set; }
         public SituacaoConta Situacao { get; set; }
 
         public Guid ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
-
-        public Guid FornecedorId { get; set; }
-        public Fornecedor? Fornecedor { get; set; }
 
         public ICollection<Parcela> Parcelas { get; set; } = new List<Parcela>();
     }

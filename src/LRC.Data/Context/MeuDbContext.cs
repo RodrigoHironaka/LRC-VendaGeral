@@ -20,12 +20,12 @@ namespace LRC.Data.Context
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Colaborador> Colaboradores { get; set; }
         public DbSet<Entregador> Entregadores { get; set; }
-        //public DbSet<Fornecedor> Fornecedores { get; set; }
+        public DbSet<Fornecedor> Fornecedores { get; set; }
         //public DbSet<Caixa> Caixas { get; set; }
         //public DbSet<FluxoCaixa> FluxosCaixa { get; set; }
-        //public DbSet<FormaPagamento> FormasPagamento { get; set; }
-        //public DbSet<ContaReceber> ContasReceber { get; set; }
-        //public DbSet<ContaPagar> ContasPagar { get; set; }
+        public DbSet<FormaPagamento> FormasPagamento { get; set; }
+        public DbSet<ContaReceber> ContasReceber { get; set; }
+        public DbSet<ContaPagar> ContasPagar { get; set; }
         //public DbSet<Parcela> Parcelas { get; set; }
 
 

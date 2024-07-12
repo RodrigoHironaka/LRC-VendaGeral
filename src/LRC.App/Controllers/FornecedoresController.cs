@@ -5,65 +5,67 @@ using LRC.Business.Entidades;
 using LRC.Business.Interfaces.Servicos;
 using LRC.Business.Interfaces;
 using LRC.Data.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LRC.App.Controllers
 {
     [Authorize]
-    public class ColaboradoresController : BaseController
+    public class FornecedoresController : BaseController
     {
-        private readonly IColaboradorService _colaboradorService;
+        private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly MeuDbContext _context;
         private readonly ILogAlteracaoService _logAlteracaoService;
 
-        public ColaboradoresController(IMapper mapper,
-                                  IColaboradorService colaboradorService,
+        public FornecedoresController(IMapper mapper,
+                                 IFornecedorService fornecedorService,
                                   UserManager<IdentityUser> userManager,
                                   MeuDbContext context,
                                   ILogAlteracaoService logAlteracaoService,
                                   INotificador notificador) : base(notificador)
         {
             _mapper = mapper;
-            _colaboradorService = colaboradorService;
+            _fornecedorService = fornecedorService;
             _userManager = userManager;
             _context = context;
             _logAlteracaoService = logAlteracaoService;
         }
 
 
-        [Route("lista-de-colaboradores")]
+        [Route("lista-de-fornecedores")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ColaboradorVM>>(await _colaboradorService.ObterTodos()));
+            return View(_mapper.Map<IEnumerable<FornecedorVM>>(await _fornecedorService.ObterTodos()));
         }
 
-        [Route("editar-colaborador/{id}")]
+        [Route("editar-fornecedor/{id}")]
         public async Task<IActionResult> Editar(Guid Id)
         {
-            var colaboradorVM = new ColaboradorVM();
+            var fornecedorVM = new FornecedorVM();
             if (Id != Guid.Empty)
             {
-                var colaborador = await _colaboradorService.ObterPorId(Id);
-                if (colaborador == null) return NotFound();
+                var fornecedor = await _fornecedorService.ObterPorId(Id);
+                if (fornecedor == null) return NotFound();
 
-                colaboradorVM = _mapper.Map<ColaboradorVM>(colaborador);
-                colaboradorVM.UsuarioCadastro = await _userManager.FindByIdAsync(colaboradorVM.UsuarioCadastroId.ToString());
-                colaboradorVM.UsuarioAlteracao = await _userManager.FindByIdAsync(colaboradorVM.UsuarioAlteracaoId.ToString());
+                fornecedorVM = _mapper.Map<FornecedorVM>(fornecedor);
+                fornecedorVM.UsuarioCadastro = await _userManager.FindByIdAsync(fornecedorVM.UsuarioCadastroId.ToString());
+                fornecedorVM.UsuarioAlteracao = await _userManager.FindByIdAsync(fornecedorVM.UsuarioAlteracaoId.ToString());
             }
 
-            return View(colaboradorVM);
+            return View(fornecedorVM);
         }
 
-        [Route("editar-colaborador/{id:guid}")]
+        [Route("editar-fornecedor/{id:guid}")]
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Editar(Guid Id, ColaboradorVM colaboradorVM)
+        public async Task<IActionResult> Editar(Guid Id, FornecedorVM fornecedorVM)
         {
-            if (Id != colaboradorVM.Id) return NotFound();
+            if (Id != fornecedorVM.Id) return NotFound();
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -71,7 +73,7 @@ namespace LRC.App.Controllers
             }
 
             IdentityUser? user = await _userManager.GetUserAsync(User);
-            Colaborador colaborador;
+            Fornecedor fornecedor;
 
             if (user != null)
             {
@@ -80,18 +82,18 @@ namespace LRC.App.Controllers
                 {
                     if (Id != Guid.Empty)
                     {
-                        var colaboradorClone = await _colaboradorService.ObterPorId(Id);
-                        colaboradorVM.DataAlteracao = DateTime.Now;
-                        colaborador = _mapper.Map<Colaborador>(colaboradorVM);
-                        colaborador.UsuarioAlteracaoId = Guid.Parse(user.Id);
-                        await _logAlteracaoService.CompararAlteracoes(colaboradorClone, colaborador, Guid.Parse(user.Id), $"Colaborador[{colaborador.Id}]");
-                        await _colaboradorService.Atualizar(colaborador);
+                        var fornecedorClone = await _fornecedorService.ObterPorId(Id);
+                        fornecedorVM.DataAlteracao = DateTime.Now;
+                        fornecedor = _mapper.Map<Fornecedor>(fornecedorVM);
+                        fornecedor.UsuarioAlteracaoId = Guid.Parse(user.Id);
+                        await _logAlteracaoService.CompararAlteracoes(fornecedorClone, fornecedor, Guid.Parse(user.Id), $"Fornecedor[{fornecedor.Id}]");
+                        await _fornecedorService.Atualizar(fornecedor);
                     }
                     else
                     {
-                        colaborador = _mapper.Map<Colaborador>(colaboradorVM);
-                        colaborador.UsuarioCadastroId = Guid.Parse(user.Id);
-                        await _colaboradorService.Adicionar(colaborador);
+                        fornecedor = _mapper.Map<Fornecedor>(fornecedorVM);
+                        fornecedor.UsuarioCadastroId = Guid.Parse(user.Id);
+                        await _fornecedorService.Adicionar(fornecedor);
                     }
 
                     if (!OperacaoValida())
@@ -99,7 +101,7 @@ namespace LRC.App.Controllers
                         await transaction.RollbackAsync();
                         List<string> errors = new List<string>();
                         errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
-                        errors.Add(ObterNotificacoes.ExecutarValidacao(new ColaboradorValidation(), colaborador));
+                        errors.Add(ObterNotificacoes.ExecutarValidacao(new FornecedorValidation(), fornecedor));
                         return Json(new { success = false, errors });
                     }
                     await transaction.CommitAsync();
@@ -111,16 +113,16 @@ namespace LRC.App.Controllers
                     return Json(new { success = false, errors = ex.Message });
                 }
             }
-            return View(colaboradorVM);
+            return View(fornecedorVM);
         }
 
         [HttpPost]
-        [Route("excluir-colaborador/{id:guid}")]
+        [Route("excluir-fornecedor/{id:guid}")]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var colaborador = await _colaboradorService.ObterPorId(id);
-            if (colaborador == null) return NotFound();
+            var fornecedor = await _fornecedorService.ObterPorId(id);
+            if (fornecedor == null) return NotFound();
             IdentityUser? user = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
@@ -128,8 +130,8 @@ namespace LRC.App.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {colaborador.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Colaborador[{colaborador.Id}]");
-                await _colaboradorService.Remover(id);
+                await _logAlteracaoService.RegistrarLogDiretamente($"Registro: {fornecedor.RazaoSocial} excluído.", Guid.Parse(user.Id), $"Fornecedor[{fornecedor.Id}]");
+                await _fornecedorService.Remover(id);
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
@@ -141,7 +143,7 @@ namespace LRC.App.Controllers
             if (!OperacaoValida())
             {
                 await transaction.RollbackAsync();
-                var errors = ObterNotificacoes.ExecutarValidacao(new ColaboradorValidation(), colaborador);
+                var errors = ObterNotificacoes.ExecutarValidacao(new FornecedorValidation(), fornecedor);
                 return Json(new { success = false, errors });
             }
 

@@ -4,6 +4,7 @@ using LRC.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRC.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    partial class MeuDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240710184358_fornecedores")]
+    partial class fornecedores
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,6 +186,9 @@ namespace LRC.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
@@ -192,24 +198,17 @@ namespace LRC.Data.Migrations
                     b.Property<DateTime>("DataEmissao")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataFechamento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataVencimento")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<Guid>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NumeroDocumento")
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Observacao")
-                        .HasColumnType("varchar(8000)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Situacao")
                         .HasColumnType("int");
@@ -220,15 +219,13 @@ namespace LRC.Data.Migrations
                     b.Property<Guid>("UsuarioCadastroId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Valor")
-                        .HasPrecision(10, 5)
-                        .HasColumnType("decimal(10,5)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("ContasPagar", (string)null);
+                    b.ToTable("ContaPagar");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.ContaReceber", b =>
@@ -247,24 +244,19 @@ namespace LRC.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataEmissao")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataFechamento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataVencimento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<Guid>("FornecedorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NumeroDocumento")
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Observacao")
-                        .HasColumnType("varchar(8000)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Situacao")
                         .HasColumnType("int");
@@ -275,15 +267,13 @@ namespace LRC.Data.Migrations
                     b.Property<Guid>("UsuarioCadastroId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Valor")
-                        .HasPrecision(10, 5)
-                        .HasColumnType("decimal(10,5)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("ContasReceber", (string)null);
+                    b.HasIndex("FornecedorId");
+
+                    b.ToTable("ContaReceber");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
@@ -404,10 +394,9 @@ namespace LRC.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<int>("PeriodoParcelamento")
+                    b.Property<int>("PeridoParcelamento")
                         .HasColumnType("int");
 
                     b.Property<int>("QtdParcelamento")
@@ -424,7 +413,7 @@ namespace LRC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FormasPagamento", (string)null);
+                    b.ToTable("FormaPagamento");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Fornecedor", b =>
@@ -775,8 +764,7 @@ namespace LRC.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Valor")
-                        .HasPrecision(10, 5)
-                        .HasColumnType("decimal(10,5)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1110,10 +1098,17 @@ namespace LRC.Data.Migrations
 
             modelBuilder.Entity("LRC.Business.Entidades.ContaPagar", b =>
                 {
+                    b.HasOne("LRC.Business.Entidades.Cliente", "Cliente")
+                        .WithMany("ContasPagar")
+                        .HasForeignKey("ClienteId")
+                        .IsRequired();
+
                     b.HasOne("LRC.Business.Entidades.Fornecedor", "Fornecedor")
                         .WithMany("ContasPagar")
                         .HasForeignKey("FornecedorId")
                         .IsRequired();
+
+                    b.Navigation("Cliente");
 
                     b.Navigation("Fornecedor");
                 });
@@ -1125,7 +1120,14 @@ namespace LRC.Data.Migrations
                         .HasForeignKey("ClienteId")
                         .IsRequired();
 
+                    b.HasOne("LRC.Business.Entidades.Fornecedor", "Fornecedor")
+                        .WithMany("ContasReceber")
+                        .HasForeignKey("FornecedorId")
+                        .IsRequired();
+
                     b.Navigation("Cliente");
+
+                    b.Navigation("Fornecedor");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Entregador", b =>
@@ -1374,6 +1376,8 @@ namespace LRC.Data.Migrations
 
             modelBuilder.Entity("LRC.Business.Entidades.Cliente", b =>
                 {
+                    b.Navigation("ContasPagar");
+
                     b.Navigation("ContasReceber");
 
                     b.Navigation("Pedidos");
@@ -1401,6 +1405,8 @@ namespace LRC.Data.Migrations
             modelBuilder.Entity("LRC.Business.Entidades.Fornecedor", b =>
                 {
                     b.Navigation("ContasPagar");
+
+                    b.Navigation("ContasReceber");
                 });
 
             modelBuilder.Entity("LRC.Business.Entidades.Grupo", b =>

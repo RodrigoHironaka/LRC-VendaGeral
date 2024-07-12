@@ -14,5 +14,9 @@ namespace LRC.App.Data
         public DbSet<LRC.App.ViewModels.EnderecoVM> EnderecoVM { get; set; } = default!;
         public DbSet<LRC.App.ViewModels.ColaboradorVM> ColaboradorVM { get; set; } = default!;
         public DbSet<LRC.App.ViewModels.EntregadorVM> EntregadorVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.FornecedorVM> FornecedorVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.FormaPagamentoVM> FormaPagamentoVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.ContaPagarVM> ContaPagarVM { get; set; } = default!;
+        public DbSet<LRC.App.ViewModels.ContaReceberVM> ContaReceberVM { get; set; } = default!;
     }
 }

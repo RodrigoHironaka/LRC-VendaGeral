@@ -16,6 +16,10 @@ namespace LRC.App.AutoMapper
             CreateMap<Endereco, EnderecoVM>().ReverseMap();
             CreateMap<Colaborador, ColaboradorVM>().ReverseMap();
             CreateMap<Entregador, EntregadorVM>().ReverseMap();
+            CreateMap<Fornecedor, FornecedorVM>().ReverseMap();
+            CreateMap<FormaPagamento, FormaPagamentoVM>().ReverseMap();
+            CreateMap<ContaPagar, ContaPagarVM>().ReverseMap();
+            CreateMap<ContaReceber, ContaReceberVM>().ReverseMap();
         }
     }
 }

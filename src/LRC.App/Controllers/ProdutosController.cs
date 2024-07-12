@@ -6,11 +6,13 @@ using LRC.Business.Interfaces;
 using LRC.Business.Interfaces.Repositorios;
 using LRC.Business.Interfaces.Servicos;
 using LRC.Data.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LRC.App.Controllers
 {
+    [Authorize]
     public class ProdutosController : BaseController
     {
 

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LRC.App.ViewModels.FornecedorVM>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Selecionar Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="javascript:window.location.reload()"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RazaoSocial)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RazaoSocial)
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success modal-trigger" data-id="@item.Id" data-name="@item.RazaoSocial" onclick="confirmar(this)"><i class="bi bi-check"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+            },
+            "dom": '<"top"f>rt<"bottom"><"clear">',
+            "paging": false,
+            "info": false,
+            "lengthChange": false,
+            "ordering": false,
+            "autoWidth": false
+        });
+    });
+
+    function confirmar(button) {
+        var id = $(button).attr('data-id');
+        var name = $(button).attr('data-name');
+        $('#FornecedorId').val(id);
+        $('#FornecedorNome').val(name);
+        $('#myModal').modal('hide');
+    }
+
+
+</script>
+

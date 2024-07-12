@@ -22,7 +22,7 @@ namespace LRC.Data.Mappings
             builder.Property(x => x.UnidadeMedida).HasConversion<Int32>();
             builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(200)");
             builder.Property(x => x.Descricao).IsRequired().HasColumnType("varchar(8000)");
-            builder.Property(x => x.Valor).IsRequired();
+            builder.Property(x => x.Valor).HasPrecision(10, 5).IsRequired();
             builder.Property(x => x.Quantidade).HasPrecision(10,3).IsRequired();
             builder.HasOne(x => x.Subgrupo).WithMany(x => x.Produtos).HasForeignKey(x => x.SubgrupoId);
             builder.ToTable("Produtos");
