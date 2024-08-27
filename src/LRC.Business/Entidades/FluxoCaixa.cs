@@ -10,6 +10,7 @@ namespace LRC.Business.Entidades
 {
     public class FluxoCaixa : Entidade
     {
+        public string? Descricao { get; set; }
         public Decimal Valor { get; set; }
         public DateTime Data { get; set; }
         public DebitoCredito DebitoCredito { get; set; } //Débito = Pagamento | Crédito = Recebimento

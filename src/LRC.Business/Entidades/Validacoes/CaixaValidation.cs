@@ -11,8 +11,6 @@ namespace LRC.Business.Entidades.Validacoes
     {
         public CaixaValidation()
         {
-            RuleFor(x => x.Numero).NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
-            RuleFor(x => x.ValorInicial).NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
             RuleFor(x => x.Situacao).NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
         }
     }

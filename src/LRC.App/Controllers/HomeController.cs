@@ -1,6 +1,8 @@
 ﻿using LRC.App.Models;
 using LRC.App.ViewModels;
+using LRC.Business.Interfaces.Repositorios;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,15 +11,25 @@ namespace LRC.App.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICaixaRepository _caixaRepository;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICaixaRepository caixaRepository, UserManager<IdentityUser> userManager)
         {
-            _logger = logger;
+            _caixaRepository = caixaRepository;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            IdentityUser? user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var caixa = await _caixaRepository.ObterCaixaAberto(user.Id);
+                if (caixa == null)
+                    ViewData["Mensagem"] = "Nenhum caixa aberto!";
+
+            }
             return View();
         }
 

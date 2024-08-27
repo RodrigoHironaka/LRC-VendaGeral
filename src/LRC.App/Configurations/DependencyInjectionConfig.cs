@@ -26,6 +26,8 @@ namespace LRC.App.Configurations
             services.AddScoped<IFormaPagamentoRepository, FormaPagamentoRepository>();
             services.AddScoped<IContaPagarRepository, ContaPagarRepository>();
             services.AddScoped<IContaReceberRepository, ContaReceberRepository>();
+            services.AddScoped<ICaixaRepository, CaixaRepository>();
+            services.AddScoped<IFluxoCaixaRepository, FluxoCaixaRepository>();
 
             services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
 
@@ -41,6 +43,8 @@ namespace LRC.App.Configurations
             services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
             services.AddScoped<IContaPagarService, ContaPagarService>();
             services.AddScoped<IContaReceberService, ContaReceberService>();
+            services.AddScoped<ICaixaService, CaixaService>();
+            services.AddScoped<IFluxoCaixaService, FluxoCaixaService>();
             return services;
         }
     }

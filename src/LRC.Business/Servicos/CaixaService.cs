@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LRC.Business.Servicos
 {
-    internal class CaixaService : BaseService, ICaixaService
+    public class CaixaService : BaseService, ICaixaService
     {
         private readonly ICaixaRepository _caixaRepository;
 

@@ -10,9 +10,8 @@ namespace LRC.Business.Entidades
 {
     public class Caixa : Entidade
     {
-        public Int64 Numero { get; set; }
-        public Decimal ValorInicial { get; set; }
         public SituacaoCaixa Situacao { get; set; }
-        public ICollection<FluxoCaixa> FluxosCaixa { get; set; } = new List<FluxoCaixa>();
+        public Int64 Numero { get; set; }
+        public IEnumerable<FluxoCaixa>? FluxosCaixa { get; set; }
     }
 }

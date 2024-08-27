@@ -20,6 +20,8 @@ namespace LRC.App.AutoMapper
             CreateMap<FormaPagamento, FormaPagamentoVM>().ReverseMap();
             CreateMap<ContaPagar, ContaPagarVM>().ReverseMap();
             CreateMap<ContaReceber, ContaReceberVM>().ReverseMap();
+            CreateMap<Caixa, CaixaVM>().ReverseMap();
+            CreateMap<FluxoCaixa, FluxoCaixaVM>().ReverseMap();
         }
     }
 }
